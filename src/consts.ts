@@ -9,6 +9,7 @@ export const SITE = {
     linkedin: "https://www.linkedin.com/in/lyutarevich/",
     telegram: "https://t.me/lyutarevich",
     github: "https://github.com/Samehadar",
+    instagram: "https://www.instagram.com/samehadar",
   },
 } as const;
 
