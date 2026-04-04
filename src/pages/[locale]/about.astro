@@ -22,7 +22,7 @@ const Content = aboutPage ? (await render(aboutPage)).Content : null;
   <div class="about-page">
     <div class="about-photo-wrap">
       <img
-        src="/images/photo.png"
+        src={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/images/photo.png`}
         alt="Vitaly Lyutarevich"
         class="about-photo"
         width="160"
