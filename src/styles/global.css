@@ -128,18 +128,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (max-width: 640px) {
-  body {
-    font-size: 1.1rem;
-  }
-  .prose {
-    font-size: 1.1rem;
-  }
-  .prose pre {
-    font-size: 1rem;
-  }
-}
-
 img {
   max-width: 100%;
   height: auto;
@@ -176,6 +164,20 @@ a.external:hover {
   font-size: 1.2793rem;
   line-height: 1.35;
   color: var(--color-text);
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  .prose {
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  .prose pre {
+    font-size: 1rem;
+  }
 }
 
 .prose h1, .prose h2, .prose h3, .prose h4 {
