@@ -1,0 +1,857 @@
+---
+import Base from "../../layouts/Base.astro";
+import { locales, type Locale } from "../../consts";
+import { useTranslations } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return locales.map((l) => ({ params: { locale: l } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = useTranslations(locale);
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<Base title="Pomodoro Timer" locale={locale}>
+  <div class="timer-page">
+
+    <!-- Top bar: title + nav links (like original) -->
+    <div class="timer-header">
+      <h1 class="timer-title">Pomodoro Timer</h1>
+      <nav class="timer-nav">
+        <a href="#" id="linkLog">Log</a>
+        <a href="#" id="linkFaq">FAQ</a>
+        <a href="#" id="linkSettings">Settings</a>
+      </nav>
+    </div>
+
+    <!-- Mode selector: connected button group, full width -->
+    <div class="mode-group">
+      <button class="mode-btn active" data-mode="pomodoro">Pomodoro</button>
+      <button class="mode-btn" data-mode="short_break">Short Break</button>
+      <button class="mode-btn" data-mode="long_break">Long Break</button>
+    </div>
+
+    <!-- Timer display -->
+    <div class="timer-display" id="timerDisplay">25:00</div>
+
+    <!-- Controls -->
+    <div class="timer-controls">
+      <button class="ctrl-btn ctrl-start" id="btnStart">Start</button>
+      <button class="ctrl-btn ctrl-stop" id="btnStop">Stop</button>
+      <button class="ctrl-btn ctrl-reset" id="btnReset">Reset</button>
+    </div>
+
+    <!-- Info panels (3-col like original) -->
+    <div class="info-panels">
+      <div class="info-panel">
+        <h3>Keyboard Shortcuts</h3>
+        <ul>
+          <li><strong>SPACE</strong>&nbsp;&nbsp;Start or Stop the timer</li>
+          <li><strong>ALT + P</strong>&nbsp;&nbsp;Pomodoro</li>
+          <li><strong>ALT + S</strong>&nbsp;&nbsp;Short Break</li>
+          <li><strong>ALT + L</strong>&nbsp;&nbsp;Long Break</li>
+          <li><strong>ALT + R</strong>&nbsp;&nbsp;Reset Timer</li>
+        </ul>
+      </div>
+      <div class="info-panel">
+        <h3>Notifications</h3>
+        <p>You can change the audio tone and volume via Settings</p>
+        <p>Desktop Notifications are supported in Chrome, Firefox and Safari</p>
+        <button class="panel-btn" id="btnEnableAlerts">Enable Desktop Alerts</button>
+      </div>
+      <div class="info-panel">
+        <h3>Settings</h3>
+        <p>You can set custom times, audio tone and volume via Settings.</p>
+      </div>
+    </div>
+
+    <!-- FAQ Modal -->
+    <div class="modal-overlay" id="faqModal">
+      <div class="modal-box">
+        <button class="modal-close" id="closeFaq">&times;</button>
+        <h2>FAQ</h2>
+        <h3>Q. What is Pomodoro Technique?</h3>
+        <p>The time management technique created by Francesco Cirillo for a more productive way to work and study. <a href="https://www.pomodorotechnique.com/" target="_blank" rel="noopener noreferrer">Learn more</a>.</p>
+        <h3>Q. How does it work?</h3>
+        <ul class="faq-list">
+          <li>Decide on the task at hand</li>
+          <li>Set the <strong>Pomodoro</strong> (timer) to 25 minutes</li>
+          <li>Work on the task until the timer expires</li>
+          <li>Take a <strong>Short Break</strong> (5 minutes)</li>
+          <li>Every four pomodoros, take a <strong>Long Break</strong> (10 minutes)</li>
+        </ul>
+        <h3>Q. Why use this timer?</h3>
+        <ul class="faq-list">
+          <li>Clean interface with mobile-friendly layout</li>
+          <li>Pause or Reset timer intervals</li>
+          <li>Audio + Desktop notifications</li>
+          <li>Keyboard shortcuts</li>
+          <li>Custom timer intervals and sounds</li>
+          <li>Session history log</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Log Modal -->
+    <div class="modal-overlay" id="logModal">
+      <div class="modal-box modal-box-wide">
+        <button class="modal-close" id="closeLog">&times;</button>
+        <h2>Time log</h2>
+        <div class="goal-row">
+          <span>Pomodoro goal tracker:</span>
+          <span class="goal-circles" id="goalCircles"></span>
+        </div>
+        <button class="panel-btn" id="btnClearGoal">Clear pomodoro's done today</button>
+        <div id="timerLog" class="log-content">nothing logged yet</div>
+        <button class="panel-btn" id="btnClearLog">Clear timer log</button>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+      <div class="modal-box">
+        <button class="modal-close" id="closeSettings">&times;</button>
+        <h2>Options</h2>
+
+        <h3>User preferences</h3>
+        <label class="checkbox-row">
+          <input type="checkbox" id="chkTitleTimer" />
+          Timer indication in title?
+        </label>
+        <label class="checkbox-row">
+          <input type="checkbox" id="chkNotifications" />
+          Browser notifications?
+        </label>
+        <label class="checkbox-row">
+          <input type="checkbox" id="chkAutoStart" />
+          Auto start pomodoros and breaks?
+        </label>
+        <div class="setting-row">
+          <label for="inputGoal">Pomodoro goal for the day</label>
+          <input type="number" id="inputGoal" min="1" step="1" class="num-input" />
+        </div>
+
+        <h3>Select Sound</h3>
+        <select id="selectSound" size="5">
+          <option value="80sAlarm">80s Alarm</option>
+          <option value="alarmclock">Alarm Clock</option>
+          <option value="alarmwatch">Wristwatch Alarm</option>
+          <option value="ding">Elevator Ding</option>
+          <option value="doorbell">Door Bell</option>
+        </select>
+
+        <h3>Select Volume</h3>
+        <select id="selectVolume" size="5">
+          <option value="0">Mute</option>
+          <option value="0.25">25%</option>
+          <option value="0.5">50%</option>
+          <option value="0.75">75%</option>
+          <option value="1.0">100%</option>
+        </select>
+
+        <h3>Set Custom Times <small>(in minutes)</small></h3>
+        <div class="times-row">
+          <div>
+            <label for="inputPomodoro">Pomodoro</label>
+            <input type="number" id="inputPomodoro" min="1" step="1" class="num-input" />
+          </div>
+          <div>
+            <label for="inputShort">Short Break</label>
+            <input type="number" id="inputShort" min="1" step="1" class="num-input" />
+          </div>
+          <div>
+            <label for="inputLong">Long Break</label>
+            <input type="number" id="inputLong" min="1" step="1" class="num-input" />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="panel-btn panel-btn-primary" id="btnSaveSettings">Save</button>
+          <button class="panel-btn" id="btnResetSettings">Reset</button>
+          <button class="panel-btn" id="btnTestSound">Sound Test</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</Base>
+
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+
+<script is:inline define:vars={{ base }}>
+(function () {
+  var SOUNDS_PATH = base + "/sounds/";
+  var PREFIX = "tt_";
+
+  function ls(key, val) {
+    if (val === undefined) return localStorage.getItem(PREFIX + key);
+    localStorage.setItem(PREFIX + key, val);
+  }
+  function lsBool(key) { return ls(key) === "true"; }
+  function lsObj(key, val) {
+    if (val === undefined) {
+      try { return JSON.parse(localStorage.getItem(PREFIX + key)) || []; }
+      catch(e) { return []; }
+    }
+    localStorage.setItem(PREFIX + key, JSON.stringify(val));
+  }
+
+  var defaults = {
+    pomodoro: 25, shortbreak: 5, longbreak: 10,
+    alertoption: "alarmwatch", volumeoption: "0.5",
+    showTimerInTitle: "true", browserNotifications: "true",
+    autoStartSequence: "false", pomodoro_goal: "1",
+    pomodoros_done_today: "0"
+  };
+
+  function initDefaults() {
+    for (var k in defaults) {
+      if (ls(k) === null) ls(k, defaults[k]);
+    }
+    if (lsObj("timerLog") === null || !Array.isArray(lsObj("timerLog"))) {
+      lsObj("timerLog", []);
+    }
+  }
+
+  var state = {
+    mode: "pomodoro", running: false, intervalId: null,
+    endTime: null, remaining: 0, startMoment: null, id: null
+  };
+
+  var sequence = [
+    "pomodoro","short_break","pomodoro","short_break",
+    "pomodoro","short_break","pomodoro","long_break"
+  ];
+  var seqIndex = 0;
+
+  var $display = document.getElementById("timerDisplay");
+  var $start = document.getElementById("btnStart");
+  var $stop = document.getElementById("btnStop");
+  var $reset = document.getElementById("btnReset");
+  var $modeBtns = document.querySelectorAll(".mode-btn");
+  var $goalCircles = document.getElementById("goalCircles");
+  var $timerLog = document.getElementById("timerLog");
+
+  function getModeSeconds(mode) {
+    var map = {
+      pomodoro: parseInt(ls("pomodoro"), 10) * 60,
+      short_break: parseInt(ls("shortbreak"), 10) * 60,
+      long_break: parseInt(ls("longbreak"), 10) * 60
+    };
+    var s = map[mode] || 1500;
+    return s >= 3600 ? 3599 : s;
+  }
+
+  function formatTime(totalSec) {
+    var m = Math.floor(totalSec / 60);
+    var s = totalSec % 60;
+    return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+  }
+
+  function uuid() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0;
+      return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+
+  function updateDisplay() {
+    $display.textContent = formatTime(state.remaining);
+    if (lsBool("showTimerInTitle")) {
+      document.title = "(" + formatTime(state.remaining) + ") Pomodoro Timer";
+    }
+  }
+
+  function setMode(mode, autoStart) {
+    if (state.intervalId) clearInterval(state.intervalId);
+    state.mode = mode;
+    state.running = false;
+    state.remaining = getModeSeconds(mode);
+    state.id = uuid();
+    state.startMoment = new Date().toISOString();
+    $modeBtns.forEach(function(btn) {
+      btn.classList.toggle("active", btn.dataset.mode === mode);
+    });
+    updateDisplay();
+    document.title = "Pomodoro Timer";
+    if (autoStart) startTimer();
+  }
+
+  function startTimer() {
+    if (state.running) return;
+    state.running = true;
+    state.startMoment = new Date().toISOString();
+    state.endTime = Date.now() + state.remaining * 1000;
+    state.intervalId = setInterval(function() {
+      var left = Math.round((state.endTime - Date.now()) / 1000);
+      if (left <= 0) {
+        left = 0;
+        clearInterval(state.intervalId);
+        state.intervalId = null;
+        state.running = false;
+        state.remaining = 0;
+        updateDisplay();
+        onTimerComplete();
+        return;
+      }
+      state.remaining = left;
+      updateDisplay();
+    }, 250);
+  }
+
+  function stopTimer() {
+    if (!state.running) return;
+    if (state.intervalId) clearInterval(state.intervalId);
+    state.intervalId = null;
+    state.running = false;
+    state.remaining = Math.max(0, Math.round((state.endTime - Date.now()) / 1000));
+    updateDisplay();
+    document.title = "Pomodoro Timer";
+  }
+
+  function resetTimer() {
+    if (state.intervalId) clearInterval(state.intervalId);
+    state.intervalId = null;
+    state.running = false;
+    state.remaining = getModeSeconds(state.mode);
+    updateDisplay();
+    document.title = "Pomodoro Timer";
+  }
+
+  function onTimerComplete() {
+    document.title = "Buzzzzz!";
+    playSound(false);
+    desktopNotify();
+    logTimerEntry();
+    if (state.mode === "pomodoro") {
+      var done = parseInt(ls("pomodoros_done_today") || "0", 10);
+      ls("pomodoros_done_today", done + 1);
+    }
+    renderGoal();
+    renderLog();
+    autoStartNext();
+  }
+
+  var currentHowl = null;
+  function playSound(isTest) {
+    var snd, vol;
+    if (isTest) {
+      snd = document.getElementById("selectSound").value;
+      vol = parseFloat(document.getElementById("selectVolume").value);
+    } else {
+      snd = ls("alertoption") || "alarmwatch";
+      vol = parseFloat(ls("volumeoption") || "0.5");
+    }
+    if (currentHowl) { try { currentHowl.stop(); } catch(e){} }
+    if (typeof Howl !== "undefined") {
+      currentHowl = new Howl({
+        src: [SOUNDS_PATH + snd + ".mp3", SOUNDS_PATH + snd + ".ogg"],
+        volume: vol
+      });
+      currentHowl.play();
+    } else {
+      var audio = new Audio(SOUNDS_PATH + snd + ".mp3");
+      audio.volume = vol;
+      audio.play().catch(function(){});
+    }
+  }
+
+  function desktopNotify() {
+    if (!lsBool("browserNotifications")) return;
+    if (!("Notification" in window)) return;
+    if (Notification.permission !== "granted") return;
+    var n = new Notification("Pomodoro Timer", { body: "Your time is up!!" });
+    setTimeout(function() { n.close(); }, 6000);
+  }
+
+  function logTimerEntry() {
+    if (!state.startMoment) return;
+    var log = lsObj("timerLog");
+    log.push({ id: state.id, mode: state.mode, start: state.startMoment, stop: new Date().toISOString() });
+    lsObj("timerLog", log);
+  }
+
+  function autoStartNext() {
+    if (!lsBool("autoStartSequence")) return;
+    var next = sequence[seqIndex];
+    seqIndex = (seqIndex + 1) % sequence.length;
+    setMode(next, true);
+  }
+
+  function renderGoal() {
+    var goal = parseInt(ls("pomodoro_goal") || "1", 10);
+    var done = parseInt(ls("pomodoros_done_today") || "0", 10);
+    if (!goal || goal < 1) { $goalCircles.textContent = "no goals set!"; return; }
+    var html = "";
+    for (var i = 1; i <= goal; i++) {
+      html += '<span class="goal-dot' + (i <= done ? " filled" : "") + '"></span>';
+    }
+    $goalCircles.innerHTML = html;
+    var $clearBtn = document.getElementById("btnClearGoal");
+    if (done > 0) { $clearBtn.disabled = false; $clearBtn.classList.remove("disabled"); }
+    else { $clearBtn.disabled = true; $clearBtn.classList.add("disabled"); }
+  }
+
+  function fmtDate(iso) {
+    try { return new Date(iso).toLocaleString(); } catch(e) { return iso; }
+  }
+
+  function renderLog() {
+    var log = lsObj("timerLog");
+    var $clearBtn = document.getElementById("btnClearLog");
+    if (!log || log.length === 0) {
+      $timerLog.textContent = "nothing logged yet";
+      $clearBtn.disabled = true; $clearBtn.classList.add("disabled");
+      return;
+    }
+    $clearBtn.disabled = false; $clearBtn.classList.remove("disabled");
+    var html = '<table class="log-table"><tr><th>Session</th><th>Start time</th><th>End time</th></tr>';
+    for (var i = 0; i < log.length; i++) {
+      var e = log[i];
+      html += "<tr><td>" + (e.mode || "") + "</td><td>" + fmtDate(e.start) + "</td><td>" + fmtDate(e.stop) + "</td></tr>";
+    }
+    html += "</table>";
+    $timerLog.innerHTML = html;
+  }
+
+  function loadSettingsUI() {
+    document.getElementById("selectSound").value = ls("alertoption") || "alarmwatch";
+    document.getElementById("selectVolume").value = ls("volumeoption") || "0.5";
+    document.getElementById("inputPomodoro").value = ls("pomodoro") || "25";
+    document.getElementById("inputShort").value = ls("shortbreak") || "5";
+    document.getElementById("inputLong").value = ls("longbreak") || "10";
+    document.getElementById("inputGoal").value = ls("pomodoro_goal") || "1";
+    document.getElementById("chkTitleTimer").checked = lsBool("showTimerInTitle");
+    document.getElementById("chkNotifications").checked = lsBool("browserNotifications");
+    document.getElementById("chkAutoStart").checked = lsBool("autoStartSequence");
+  }
+
+  function saveSettings() {
+    var pom = parseInt(document.getElementById("inputPomodoro").value, 10);
+    var sb = parseInt(document.getElementById("inputShort").value, 10);
+    var lb = parseInt(document.getElementById("inputLong").value, 10);
+    if (!pom || pom < 1 || !sb || sb < 1 || !lb || lb < 1) { alert("Please use positive integers for all timers"); return; }
+    ls("pomodoro", pom); ls("shortbreak", sb); ls("longbreak", lb);
+    ls("alertoption", document.getElementById("selectSound").value);
+    ls("volumeoption", document.getElementById("selectVolume").value);
+    ls("pomodoro_goal", document.getElementById("inputGoal").value);
+    ls("showTimerInTitle", document.getElementById("chkTitleTimer").checked);
+    ls("browserNotifications", document.getElementById("chkNotifications").checked);
+    ls("autoStartSequence", document.getElementById("chkAutoStart").checked);
+    resetTimer();
+    document.getElementById("settingsModal").classList.remove("open");
+    renderGoal();
+  }
+
+  function resetSettingsUI() {
+    document.getElementById("selectSound").value = "alarmwatch";
+    document.getElementById("selectVolume").value = "0.5";
+    document.getElementById("inputPomodoro").value = "25";
+    document.getElementById("inputShort").value = "5";
+    document.getElementById("inputLong").value = "10";
+  }
+
+  function openModal(id) { document.getElementById(id).classList.add("open"); }
+  function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+  $start.addEventListener("click", startTimer);
+  $stop.addEventListener("click", stopTimer);
+  $reset.addEventListener("click", resetTimer);
+  $modeBtns.forEach(function(btn) { btn.addEventListener("click", function() { setMode(btn.dataset.mode); }); });
+
+  document.getElementById("linkLog").addEventListener("click", function(e) { e.preventDefault(); renderGoal(); renderLog(); openModal("logModal"); });
+  document.getElementById("linkFaq").addEventListener("click", function(e) { e.preventDefault(); openModal("faqModal"); });
+  document.getElementById("linkSettings").addEventListener("click", function(e) { e.preventDefault(); loadSettingsUI(); openModal("settingsModal"); });
+
+  document.getElementById("closeFaq").addEventListener("click", function() { closeModal("faqModal"); });
+  document.getElementById("closeLog").addEventListener("click", function() { closeModal("logModal"); });
+  document.getElementById("closeSettings").addEventListener("click", function() { closeModal("settingsModal"); });
+
+  document.querySelectorAll(".modal-overlay").forEach(function(el) {
+    el.addEventListener("click", function(e) { if (e.target === el) el.classList.remove("open"); });
+  });
+
+  document.getElementById("btnSaveSettings").addEventListener("click", saveSettings);
+  document.getElementById("btnResetSettings").addEventListener("click", resetSettingsUI);
+  document.getElementById("btnTestSound").addEventListener("click", function() { playSound(true); });
+  document.getElementById("btnEnableAlerts").addEventListener("click", function() {
+    if ("Notification" in window) Notification.requestPermission();
+  });
+  document.getElementById("btnClearGoal").addEventListener("click", function() { ls("pomodoros_done_today", 0); renderGoal(); });
+  document.getElementById("btnClearLog").addEventListener("click", function() { lsObj("timerLog", []); renderLog(); });
+
+  document.addEventListener("keydown", function(e) {
+    if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT" || e.target.tagName === "TEXTAREA") return;
+    if (e.code === "Space") { e.preventDefault(); state.running ? stopTimer() : startTimer(); }
+    if (e.altKey && e.code === "KeyP") { e.preventDefault(); setMode("pomodoro"); }
+    if (e.altKey && e.code === "KeyS") { e.preventDefault(); setMode("short_break"); }
+    if (e.altKey && e.code === "KeyL") { e.preventDefault(); setMode("long_break"); }
+    if (e.altKey && e.code === "KeyR") { e.preventDefault(); resetTimer(); }
+  });
+
+  initDefaults();
+  setMode("pomodoro");
+  renderGoal();
+  renderLog();
+})();
+</script>
+
+<style>
+  .timer-page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding-bottom: 3rem;
+  }
+
+  /* Header bar */
+  .timer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .timer-title {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: bold;
+    font-style: italic;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1;
+  }
+  .timer-nav {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .timer-nav a {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    background: var(--color-accent);
+    color: #fff;
+    text-decoration: none;
+    transition: opacity 0.15s;
+    letter-spacing: 0.01em;
+  }
+  .timer-nav a:hover { opacity: 0.85; }
+
+  /* Mode button group */
+  .mode-group {
+    display: flex;
+    margin-bottom: 1.5rem;
+  }
+  .mode-btn {
+    flex: 1;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.75rem 0;
+    border: 2px solid var(--color-accent);
+    background: var(--color-bg-card);
+    color: var(--color-accent);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .mode-btn:first-child { border-radius: 8px 0 0 8px; }
+  .mode-btn:last-child { border-radius: 0 8px 8px 0; }
+  .mode-btn:not(:first-child) { border-left: none; }
+  .mode-btn:hover { background: var(--color-accent-light); }
+  .mode-btn.active {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  /* Timer display */
+  .timer-display {
+    font-family: var(--font-mono, monospace);
+    font-size: 8rem;
+    font-weight: bold;
+    color: var(--color-text);
+    text-align: center;
+    margin: 1.5rem 0 2rem;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  /* Controls */
+  .timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .ctrl-btn {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 0.85rem 2.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .ctrl-btn:hover { opacity: 0.85; }
+  .ctrl-start { background: #43a047; color: #fff; }
+  .ctrl-stop { background: #e53935; color: #fff; }
+  .ctrl-reset { background: var(--color-bg-alt); color: var(--color-text-muted); border: 1px solid var(--color-border); }
+
+  /* Info panels */
+  .info-panels {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .info-panel {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .info-panel h3 {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: bold;
+    margin: 0 0 0.6rem;
+    color: var(--color-text);
+  }
+  .info-panel p {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin: 0 0 0.6rem;
+    line-height: 1.45;
+  }
+  .info-panel ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.8;
+  }
+  .info-panel strong {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.85rem;
+  }
+
+  .panel-btn {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.45rem 1rem;
+    border: none;
+    border-radius: 5px;
+    background: var(--color-accent);
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .panel-btn:hover { opacity: 0.85; }
+  .panel-btn.disabled { opacity: 0.4; cursor: default; }
+  .panel-btn-primary { background: var(--color-accent); }
+
+  /* Modals */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 4rem 1rem;
+    overflow-y: auto;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal-box {
+    position: relative;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 2rem;
+    max-width: 520px;
+    width: 100%;
+  }
+  .modal-box-wide { max-width: 720px; }
+  .modal-box h2 {
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    font-weight: bold;
+    margin: 0 0 1rem;
+    color: var(--color-text);
+  }
+  .modal-box h3 {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 1.2rem 0 0.4rem;
+    color: var(--color-text);
+  }
+  .modal-box h3 small { font-weight: normal; color: var(--color-text-muted); }
+  .modal-box p {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin: 0 0 0.6rem;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+    font-size: 1.8rem;
+    line-height: 1;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+  .modal-close:hover { color: var(--color-text); }
+
+  .faq-list {
+    list-style: disc;
+    padding-left: 1.25rem;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin: 0.4rem 0 0.8rem;
+  }
+
+  /* Log modal */
+  .goal-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--color-text);
+  }
+  .goal-circles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .goal-dot {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #43a047;
+    border-radius: 50%;
+    background: transparent;
+  }
+  .goal-dot.filled { background: #43a047; }
+
+  .log-content {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin: 1rem 0;
+    overflow-x: auto;
+  }
+  .log-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+  }
+  .log-table th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--color-text);
+    padding: 0.4rem 0.5rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+  .log-table td {
+    padding: 0.4rem 0.5rem;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* Settings modal */
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+  }
+  .checkbox-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-accent);
+  }
+  .setting-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--color-text);
+    margin: 0.6rem 0;
+  }
+  .num-input {
+    width: 65px;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+  .modal-box select {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    background: var(--color-bg);
+    color: var(--color-text);
+    padding: 0.2rem;
+  }
+  .times-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .times-row label {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.2rem;
+  }
+  .times-row .num-input { width: 100%; }
+  .modal-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+
+  @media (max-width: 640px) {
+    .timer-display { font-size: 4.5rem; }
+    .timer-header { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+    .timer-controls { flex-wrap: wrap; }
+    .info-panels { grid-template-columns: 1fr; }
+    .times-row { grid-template-columns: 1fr; }
+    .ctrl-btn { padding: 0.75rem 1.5rem; }
+  }
+</style>
