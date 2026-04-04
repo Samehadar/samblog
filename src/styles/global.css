@@ -232,8 +232,9 @@ a.external:hover {
 .prose blockquote {
   border-left: 3px solid var(--color-border-hover);
   font-style: italic;
-  margin-left: 1.5rem;
-  padding-left: 0.5rem;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0.75rem;
 }
 
 .prose blockquote p:last-child {
@@ -290,7 +291,6 @@ html.dark .astro-code span {
 }
 
 .prose img {
-  border-radius: 8px;
   margin: 1.25em 0;
 }
 
@@ -341,9 +341,6 @@ html.dark .astro-code span {
 }
 
 @media (max-width: 640px) {
-  .prose blockquote {
-    margin-left: 0.5rem;
-  }
   .prose pre {
     margin-left: 0;
   }
