@@ -1,0 +1,50 @@
+---
+description: Project architecture and conventions for samblog
+alwaysApply: true
+---
+
+# samblog — Project Rules
+
+## Stack
+
+Astro 6 (SSG) + Vue 3 (Composition API) + Tailwind CSS 4 + MDX. Node.js >= 22.12.0.
+
+## Architecture
+
+- `src/pages/[locale]/` — file-based routing, all pages are locale-prefixed (en, ru, pl)
+- `src/layouts/Base.astro` — HTML shell, theme script, font preloads
+- `src/layouts/Post.astro` — blog post layout with sidebar TOC and share buttons
+- `src/components/` — Astro components (`.astro`) and Vue interactive components (`.vue`)
+- `src/content/` — MDX content collections: `blog/`, `pages/`, `things/`
+- `src/content.config.ts` — collection schemas (Zod)
+- `src/i18n/ui.ts` — translation strings, `src/i18n/utils.ts` — helper functions
+- `src/consts.ts` — site metadata, locales, social links
+- `src/styles/global.css` — design tokens, prose styles, base styles
+
+## Conventions
+
+- Three locales: `en`, `ru`, `pl`. Default: `en`. Order in UI: EN, RU, PL.
+- Dark mode is the default theme.
+- All Latin text uses Cambria font (`--font-serif`). Never use `--font-sans` in components.
+- No comments in code unless explaining non-obvious intent.
+- Do not rename existing methods or fields.
+- Do not perform major refactoring unless explicitly asked.
+- Content collection `things` uses `thingId` (not `slug`) in frontmatter to avoid Astro glob loader ID conflicts.
+- VK and Yandex Music links in `things` collection have `ruOnly: true` — only shown when locale is `ru`.
+
+## i18n
+
+- UI strings go in `src/i18n/ui.ts` — all three locales must be updated together.
+- Navigation keys: `nav.blog`, `nav.about`, `nav.now`, `nav.things`.
+- Site locale (UI language) and article locale (content language) are decoupled for blog posts.
+
+## Git
+
+- Never change git config. All commits must be from `Vitaly Lyutarevich <vitaly.lyutarevich@gmail.com>`.
+- Never commit or push without explicit user permission.
+
+## Styling
+
+- CSS custom properties defined in `global.css` under `@theme` block.
+- Scoped styles in `.astro` files preferred over global CSS for component-specific styles.
+- Accent color: `--color-accent` (BORK-style orange/terracotta).

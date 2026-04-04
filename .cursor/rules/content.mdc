@@ -1,0 +1,31 @@
+---
+description: Rules for MDX content files
+globs: src/content/**/*.mdx
+alwaysApply: false
+---
+
+# Content Rules
+
+## Blog posts (`src/content/blog/`)
+
+Frontmatter: `title`, `date`, `locale` (ru/en/pl), `tags`, `description`, `toc` (boolean), `translations` (optional map of locale -> slug).
+
+File naming: `kebab-case.mdx`. One file per article (not per locale, unless translated).
+
+## Pages (`src/content/pages/`)
+
+Frontmatter: `title`, `locale`, `updated` (optional date).
+
+File naming: `name.locale.mdx` (e.g. `about.en.mdx`, `now.ru.mdx`).
+
+## Things (`src/content/things/`)
+
+Frontmatter: `title`, `locale`, `thingId`, `description`, `tags`, `links` (array with `label`, `href`, optional `ruOnly`), `order`.
+
+File naming: `thingId-locale.mdx` (e.g. `goh-en.mdx`). Use hyphen, NOT dot — dot causes Astro glob loader ID collisions.
+
+## General
+
+- Use JSX comments `{/* */}` in MDX, not HTML comments `<!-- -->`.
+- Author name in English: "Vitaly Lyutarevich". In Polish: "Witalis Lutorowicz". In Russian: "Виталий Лютаревич".
+- Never publish internal company data (employee names, portal links, budgets) in blog articles.
