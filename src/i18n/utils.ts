@@ -2,7 +2,9 @@ import { ui, type UIKey } from "./ui";
 import { defaultLocale, type Locale, locales } from "../consts";
 
 export function getLocaleFromUrl(url: URL): Locale {
-  const [, lang] = url.pathname.split("/");
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const path = url.pathname.startsWith(base) ? url.pathname.slice(base.length) : url.pathname;
+  const [, lang] = path.split("/");
   if (locales.includes(lang as Locale)) return lang as Locale;
   return defaultLocale;
 }
@@ -14,19 +16,23 @@ export function useTranslations(locale: Locale) {
 }
 
 export function getLocalePath(locale: Locale, path: string = ""): string {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   const clean = path.startsWith("/") ? path.slice(1) : path;
-  return `/${locale}/${clean}`;
+  return `${base}/${locale}/${clean}`;
 }
 
 export function switchLocalePath(
   currentUrl: URL,
   targetLocale: Locale,
 ): string {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const baseParts = base.split("/").filter(Boolean);
   const segments = currentUrl.pathname.split("/").filter(Boolean);
-  if (locales.includes(segments[0] as Locale)) {
-    segments[0] = targetLocale;
+  const pathSegments = segments.slice(baseParts.length);
+  if (locales.includes(pathSegments[0] as Locale)) {
+    pathSegments[0] = targetLocale;
   } else {
-    segments.unshift(targetLocale);
+    pathSegments.unshift(targetLocale);
   }
-  return "/" + segments.join("/");
+  return base + "/" + pathSegments.join("/");
 }
