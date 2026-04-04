@@ -1,0 +1,26 @@
+---
+import { useTranslations } from "../i18n/utils";
+import type { Locale } from "../consts";
+
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+  locale: Locale;
+}
+
+const { headings, locale } = Astro.props;
+const t = useTranslations(locale);
+const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{filtered.length > 0 && (
+  <nav class="toc" aria-label="Table of Contents">
+    <p class="toc-title">{t("post.toc")}</p>
+    <ul>
+      {filtered.map((h) => (
+        <li style={h.depth === 3 ? "padding-left: 1rem" : ""}>
+          <a href={`#${h.slug}`}>{h.text}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

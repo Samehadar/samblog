@@ -1,0 +1,150 @@
+---
+import Base from "../../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+import { locales, type Locale } from "../../../consts";
+import { useTranslations, getLocalePath } from "../../../i18n/utils";
+
+export function getStaticPaths() {
+  return locales.map((l) => ({ params: { locale: l } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = useTranslations(locale);
+
+const allThings = await getCollection("things");
+
+const slugs = [...new Set(allThings.map((t) => t.data.thingId))];
+const things = slugs
+  .map((slug) => {
+    const localeMatch = allThings.find((t) => t.data.thingId === slug && t.data.locale === locale);
+    const fallback = allThings.find((t) => t.data.thingId === slug && t.data.locale === "en");
+    return localeMatch || fallback || allThings.find((t) => t.data.thingId === slug);
+  })
+  .filter(Boolean)
+  .sort((a, b) => (a!.data.order ?? 0) - (b!.data.order ?? 0));
+---
+
+<Base title={t("things.title")} locale={locale}>
+  <div class="things-page">
+    <h1 class="page-heading">{t("things.title")}</h1>
+
+    <div class="things-grid">
+      {things.map((thing) => {
+        const d = thing!.data;
+        const visibleLinks = d.links.filter((l) => !l.ruOnly || locale === "ru");
+        return (
+          <a href={getLocalePath(locale, `things/${d.thingId}`)} class="thing-card">
+            <h2 class="thing-name">{d.title}</h2>
+            <p class="thing-desc">{d.description}</p>
+            <div class="thing-tags">
+              {d.tags.map((tag) => <span class="ttag">{tag}</span>)}
+            </div>
+            {visibleLinks.length > 0 && (
+              <div class="thing-links">
+                {visibleLinks.map((link, i) => (
+                  <>
+                    <span class="thing-link-label">{link.label}</span>
+                    {i < visibleLinks.length - 1 && <span class="link-dot">&middot;</span>}
+                  </>
+                ))}
+              </div>
+            )}
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .things-page {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .page-heading {
+    font-family: var(--font-serif);
+    font-size: 2.5586rem;
+    font-weight: bold;
+    line-height: 1;
+    margin: 1rem 0 2rem;
+    color: var(--color-text);
+  }
+
+  .things-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .thing-card {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .thing-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 16px rgba(232, 89, 12, 0.08);
+    text-decoration: none;
+  }
+
+  .thing-name {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: bold;
+    margin: 0 0 0.5rem;
+    color: var(--color-text);
+    transition: color 0.15s ease;
+  }
+  .thing-card:hover .thing-name { color: var(--color-accent); }
+
+  .thing-desc {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    line-height: 1.35;
+    margin: 0 0 1rem;
+    flex: 1;
+  }
+
+  .thing-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 1rem;
+  }
+
+  .ttag {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    background-color: var(--color-accent-light);
+    padding: 0.15em 0.5em;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .thing-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-family: var(--font-serif);
+    font-size: 1.087rem;
+    color: var(--color-text-faint);
+  }
+
+  .thing-link-label {
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+
+  .link-dot {
+    color: var(--color-text-faint);
+  }
+</style>

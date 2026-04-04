@@ -1,0 +1,119 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import PostCard from "../../components/PostCard.astro";
+import { SITE, locales, type Locale } from "../../consts";
+import { useTranslations, getLocalePath } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return locales.map((l) => ({ params: { locale: l } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = useTranslations(locale);
+const author = SITE.author[locale];
+
+const allPosts = await getCollection("blog");
+const recentPosts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+---
+
+<Base title={t("nav.home")} locale={locale}>
+  <section class="hero">
+    <h1 class="hero-name">{author}</h1>
+    <p class="hero-subtitle">{t("hero.subtitle")}</p>
+    <div class="hero-links">
+      <a href={SITE.socials.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      <span class="dot">&middot;</span>
+      <a href={SITE.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <span class="dot">&middot;</span>
+      <a href={SITE.socials.telegram} target="_blank" rel="noopener noreferrer">Telegram</a>
+    </div>
+  </section>
+
+  <section class="recent-posts">
+    <h2 class="section-title">{t("home.recentPosts")}</h2>
+    <div class="posts-list">
+      {recentPosts.map((post) => (
+        <PostCard
+          title={post.data.title}
+          slug={post.id}
+          date={post.data.date}
+          locale={post.data.locale as Locale}
+          pageLocale={locale}
+          description={post.data.description}
+          tags={post.data.tags}
+          readingTime={post.data.readingTime as number}
+        />
+      ))}
+    </div>
+    <p class="all-posts-link">
+      <a href={getLocalePath(locale, "blog")}>{t("home.allPosts")} &rarr;</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 4rem 0 3rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .hero-name {
+    font-family: var(--font-serif);
+    font-size: 2.5586rem;
+    font-weight: bold;
+    line-height: 1;
+    margin: 0 auto 0.75rem;
+    color: var(--color-text);
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-serif);
+    font-size: 1.2793rem;
+    color: var(--color-text-muted);
+    margin: 0 0 1.25rem;
+  }
+
+  .hero-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-serif);
+    font-size: 1.087rem;
+  }
+  .hero-links .dot { color: var(--color-text-faint); }
+
+  .recent-posts {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    margin: 0 0 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-accent);
+  }
+
+  .all-posts-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-family: var(--font-serif);
+    font-size: 1.087rem;
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding: 2rem 0 2rem; }
+    .hero-name { font-size: 2rem; }
+  }
+</style>

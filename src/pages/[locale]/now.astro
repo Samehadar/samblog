@@ -1,0 +1,65 @@
+---
+import { getCollection, render as renderEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { locales, type Locale } from "../../consts";
+import { useTranslations } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return locales.map((l) => ({ params: { locale: l } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = useTranslations(locale);
+
+const pages = await getCollection("pages");
+const nowPage = pages.find(
+  (p) => p.id.startsWith("now") && p.data.locale === locale
+);
+const Content = nowPage ? (await renderEntry(nowPage)).Content : null;
+const updated = nowPage?.data.updated;
+---
+
+<Base title={t("now.title")} locale={locale}>
+  <div class="now-page">
+    <h1 class="page-heading">{t("now.title")}</h1>
+
+    {updated && (
+      <p class="updated-date">
+        {t("now.updated")}: <time datetime={updated.toISOString()}>
+          {updated.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}
+        </time>
+      </p>
+    )}
+
+    {Content ? (
+      <div class="prose">
+        <Content />
+      </div>
+    ) : (
+      <p>Content not found.</p>
+    )}
+  </div>
+</Base>
+
+<style>
+  .now-page {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .page-heading {
+    font-family: var(--font-serif);
+    font-size: 2.5586rem;
+    font-weight: bold;
+    line-height: 1;
+    margin: 1rem 0 0.5rem;
+    color: var(--color-text);
+  }
+
+  .updated-date {
+    font-family: var(--font-serif);
+    font-size: 1.087rem;
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+  }
+</style>

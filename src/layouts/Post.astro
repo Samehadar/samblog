@@ -1,0 +1,348 @@
+---
+import Base from "./Base.astro";
+import TableOfContents from "../components/TableOfContents.astro";
+import ShareButtons from "../components/ShareButtons.astro";
+import { useTranslations, getLocalePath } from "../i18n/utils";
+import { type Locale, locales } from "../consts";
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  locale: Locale;
+  siteLocale: Locale;
+  postId: string;
+  tags: string[];
+  readingTime?: number;
+  toc?: boolean;
+  headings?: { depth: number; slug: string; text: string }[];
+  translations?: Partial<Record<Locale, string>>;
+}
+
+const {
+  title,
+  description,
+  date,
+  locale,
+  siteLocale,
+  postId,
+  tags,
+  readingTime,
+  toc,
+  headings = [],
+  translations,
+} = Astro.props;
+
+const t = useTranslations(siteLocale);
+const langLabel: Record<Locale, string> = { ru: "RU", en: "EN", pl: "PL" };
+
+const languageItems: { locale: Locale; label: string; href: string | null; active: boolean }[] = [
+  { locale, label: langLabel[locale], href: null, active: true },
+];
+if (translations) {
+  for (const [l, slug] of Object.entries(translations)) {
+    if (slug && l !== locale) {
+      languageItems.push({
+        locale: l as Locale,
+        label: langLabel[l as Locale],
+        href: getLocalePath(siteLocale, `blog/${slug}`),
+        active: false,
+      });
+    }
+  }
+}
+
+const localeLinks = Object.fromEntries(
+  locales.map((l) => {
+    if (l === locale) return [l, getLocalePath(l, `blog/${postId}`)];
+    const translatedSlug = translations?.[l];
+    return [l, getLocalePath(l, `blog/${translatedSlug || postId}`)];
+  })
+) as Partial<Record<Locale, string>>;
+---
+
+<Base title={title} description={description} locale={siteLocale} contentLocale={locale} post={{ date, tags }} localeLinks={localeLinks}>
+  {toc && headings.length > 0 ? (
+    <div class="post-layout has-toc">
+      <aside class="toc-sidebar">
+        <nav aria-label="Table of Contents">
+          <p class="toc-sidebar-title">{t("post.toc")}</p>
+          <ul>
+            {headings.filter((h) => h.depth >= 2 && h.depth <= 3).map((h) => (
+              <li class={h.depth === 3 ? "depth-3" : ""}>
+                <a href={`#${h.slug}`} data-slug={h.slug}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+      <article class="post-article">
+        <header class="post-header">
+          <h1 class="post-title">{title}</h1>
+          <div class="post-meta">
+            {languageItems.map((item) =>
+              item.active
+                ? <span class:list={["post-lang", "active", `lang-${item.locale}`]}>{item.label}</span>
+                : <a href={item.href} class:list={["post-lang", "link", `lang-${item.locale}`]}>{item.label}</a>
+            )}
+            <time datetime={date.toISOString()}>
+              {date.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}
+            </time>
+            {readingTime && <span>&middot; {readingTime} {t("blog.readingTime")}</span>}
+          </div>
+          {tags.length > 0 && (
+            <div class="post-tags">
+              {tags.map((tag) => <span class="tag">#{tag}</span>)}
+            </div>
+          )}
+        </header>
+
+        <div class="toc-inline">
+          <TableOfContents headings={headings} locale={siteLocale} />
+        </div>
+
+        <div class="prose">
+          <slot />
+        </div>
+
+        <ShareButtons title={title} url={Astro.url.pathname} locale={siteLocale} />
+      </article>
+    </div>
+  ) : (
+    <article class="post-article">
+      <header class="post-header">
+        <h1 class="post-title">{title}</h1>
+        <div class="post-meta">
+          {languageItems.map((item) =>
+            item.active
+              ? <span class:list={["post-lang", "active", `lang-${item.locale}`]}>{item.label}</span>
+              : <a href={item.href} class:list={["post-lang", "link", `lang-${item.locale}`]}>{item.label}</a>
+          )}
+          <time datetime={date.toISOString()}>
+            {date.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}
+          </time>
+          {readingTime && <span>&middot; {readingTime} {t("blog.readingTime")}</span>}
+        </div>
+        {tags.length > 0 && (
+          <div class="post-tags">
+            {tags.map((tag) => <span class="tag">#{tag}</span>)}
+          </div>
+        )}
+      </header>
+
+      <div class="prose">
+        <slot />
+      </div>
+
+      <ShareButtons title={title} url={Astro.url.pathname} locale={siteLocale} />
+    </article>
+  )}
+
+  <script>
+    document.querySelectorAll(".prose h2[id], .prose h3[id], .prose h4[id]").forEach((h) => {
+      const a = document.createElement("a");
+      a.href = `#${h.id}`;
+      a.className = "heading-anchor";
+      a.ariaLabel = "Link to this section";
+      a.textContent = "#";
+      h.appendChild(a);
+    });
+
+    const sidebar = document.querySelector(".toc-sidebar");
+    if (sidebar) {
+      const links = sidebar.querySelectorAll<HTMLAnchorElement>("a[data-slug]");
+      const headings = Array.from(document.querySelectorAll(".prose h2[id], .prose h3[id]"));
+
+      if (headings.length > 0 && links.length > 0) {
+        let current = "";
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                current = entry.target.id;
+              }
+            }
+            links.forEach((link) => {
+              link.classList.toggle("active", link.dataset.slug === current);
+            });
+          },
+          { rootMargin: "-80px 0px -70% 0px", threshold: 0 }
+        );
+
+        headings.forEach((h) => observer.observe(h));
+      }
+    }
+  </script>
+</Base>
+
+<style>
+  .post-article {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .post-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .post-title {
+    font-family: var(--font-serif);
+    font-size: 2.5586rem;
+    font-weight: bold;
+    line-height: 1;
+    margin: 0 0 0.5rem;
+    color: var(--color-text);
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-serif);
+    font-size: 1.087rem;
+    color: var(--color-text-muted);
+  }
+
+  .post-lang {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    border: 1px solid var(--color-border);
+  }
+
+  .post-lang.active {
+    background-color: var(--color-bg-alt);
+  }
+  .post-lang.active.lang-ru { color: #3b82f6; }
+  .post-lang.active.lang-en { color: #10b981; }
+  .post-lang.active.lang-pl { color: #f43f5e; }
+
+  .post-lang.link {
+    color: var(--color-text-faint);
+    background-color: transparent;
+    text-decoration: none;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  }
+  .post-lang.link:hover {
+    background-color: var(--color-bg-alt);
+  }
+  .post-lang.link.lang-ru:hover { color: #3b82f6; border-color: #3b82f6; }
+  .post-lang.link.lang-en:hover { color: #10b981; border-color: #10b981; }
+  .post-lang.link.lang-pl:hover { color: #f43f5e; border-color: #f43f5e; }
+
+  .post-tags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-top: 0.75rem;
+  }
+
+  .tag {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    color: var(--color-text-faint);
+    background-color: var(--color-bg-alt);
+    padding: 0.15em 0.5em;
+    border-radius: 4px;
+  }
+
+  /* --- Post layout with sidebar TOC --- */
+
+  .post-layout {
+    display: flex;
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    justify-content: center;
+  }
+
+  .post-layout .post-article {
+    max-width: 680px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toc-sidebar {
+    display: none;
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 5rem;
+    align-self: flex-start;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+  }
+
+  .toc-sidebar nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc-sidebar-title {
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.75rem 0;
+    color: var(--color-text-faint);
+  }
+
+  .toc-sidebar nav li {
+    margin: 0;
+    border-left: 2px solid transparent;
+    transition: border-color 0.15s ease;
+  }
+
+  .toc-sidebar nav li.depth-3 {
+    padding-left: 0.75rem;
+  }
+
+  .toc-sidebar nav a {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    line-height: 1.35;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    display: block;
+    padding: 0.25rem 0 0.25rem 0.75rem;
+    transition: color 0.15s ease;
+  }
+
+  .toc-sidebar nav a:hover {
+    color: var(--color-accent);
+  }
+
+  .toc-sidebar nav a.active {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .toc-sidebar nav li:has(a.active) {
+    border-left-color: var(--color-accent);
+  }
+
+  .toc-inline {
+    display: block;
+  }
+
+  @media (min-width: 1200px) {
+    .toc-sidebar {
+      display: block;
+    }
+    .toc-inline {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .post-title { font-size: 2rem; }
+  }
+</style>

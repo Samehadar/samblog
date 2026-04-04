@@ -1,0 +1,84 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { locales, type Locale } from "../../consts";
+import { useTranslations } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return locales.map((l) => ({ params: { locale: l } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = useTranslations(locale);
+
+const pages = await getCollection("pages");
+const aboutPage = pages.find(
+  (p) => p.id.startsWith("about") && p.data.locale === locale
+);
+const Content = aboutPage ? (await render(aboutPage)).Content : null;
+---
+
+<Base title={t("about.title")} locale={locale}>
+  <div class="about-page">
+    <div class="about-photo-wrap">
+      <img
+        src="/images/photo.png"
+        alt="Vitaly Lyutarevich"
+        class="about-photo"
+        width="160"
+        height="160"
+        loading="eager"
+      />
+    </div>
+    <h1 class="page-heading">{t("about.title")}</h1>
+    {Content ? (
+      <div class="prose">
+        <Content />
+      </div>
+    ) : (
+      <p>Content not found.</p>
+    )}
+  </div>
+</Base>
+
+<style>
+  .about-page {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .about-photo-wrap {
+    display: block;
+    margin: 1.5rem auto 1rem;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--color-accent);
+  }
+
+  .about-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+    transform: scale(1.25);
+    filter: grayscale(80%) sepia(20%);
+    transition: filter 0.3s ease;
+  }
+
+  .about-photo:hover {
+    filter: none;
+  }
+
+  .page-heading {
+    font-family: var(--font-serif);
+    font-size: 2.5586rem;
+    font-weight: bold;
+    line-height: 1;
+    margin: 0 0 1.5rem;
+    color: var(--color-text);
+    text-align: center;
+  }
+</style>

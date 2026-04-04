@@ -1,0 +1,128 @@
+---
+import Base from "../../../layouts/Base.astro";
+import { getCollection, render } from "astro:content";
+import { locales, type Locale } from "../../../consts";
+import { useTranslations, getLocalePath } from "../../../i18n/utils";
+
+export async function getStaticPaths() {
+  const allThings = await getCollection("things");
+  const slugs = [...new Set(allThings.map((t) => t.data.thingId))];
+
+  return locales.flatMap((locale) =>
+    slugs.map((slug) => {
+      const localeMatch = allThings.find((t) => t.data.thingId === slug && t.data.locale === locale);
+      const fallback = allThings.find((t) => t.data.thingId === slug && t.data.locale === "en");
+      const thing = localeMatch || fallback || allThings.find((t) => t.data.thingId === slug);
+      return {
+        params: { locale, slug },
+        props: { thing: thing!, siteLocale: locale },
+      };
+    })
+  );
+}
+
+const { thing, siteLocale } = Astro.props;
+const locale = siteLocale as Locale;
+const t = useTranslations(locale);
+const { Content } = await render(thing);
+const d = thing.data;
+const visibleLinks = d.links.filter((l: { ruOnly?: boolean }) => !l.ruOnly || locale === "ru");
+---
+
+<Base title={d.title} description={d.description} locale={locale}>
+  <article class="thing-detail">
+    <header class="thing-header">
+      <h1 class="thing-title">{d.title}</h1>
+      {d.tags.length > 0 && (
+        <div class="thing-tags">
+          {d.tags.map((tag: string) => <span class="ttag">{tag}</span>)}
+        </div>
+      )}
+      {visibleLinks.length > 0 && (
+        <div class="thing-links">
+          {visibleLinks.map((link: { label: string; href: string }, i: number) => (
+            <>
+              <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+              {i < visibleLinks.length - 1 && <span class="link-dot">&middot;</span>}
+            </>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <p class="back-link">
+      <a href={getLocalePath(locale, "things")}>&larr; {t("things.title")}</a>
+    </p>
+  </article>
+</Base>
+
+<style>
+  .thing-detail {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .thing-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .thing-title {
+    font-family: var(--font-serif);
+    font-size: 2.5586rem;
+    font-weight: bold;
+    line-height: 1;
+    margin: 0 0 0.75rem;
+    color: var(--color-text);
+  }
+
+  .thing-tags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .ttag {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    background-color: var(--color-accent-light);
+    padding: 0.15em 0.5em;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .thing-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-family: var(--font-serif);
+    font-size: 1.087rem;
+  }
+
+  .link-dot {
+    color: var(--color-text-faint);
+  }
+
+  .back-link {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-serif);
+    font-size: 1.087rem;
+  }
+
+  @media (max-width: 640px) {
+    .thing-title { font-size: 2rem; }
+  }
+</style>

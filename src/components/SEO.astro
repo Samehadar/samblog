@@ -1,0 +1,84 @@
+---
+import { SITE, type Locale, locales } from "../consts";
+import { getLocalePath, switchLocalePath } from "../i18n/utils";
+
+interface Props {
+  title: string;
+  description?: string;
+  locale: Locale;
+  ogImage?: string;
+  canonicalPath?: string;
+  post?: {
+    date: Date;
+    tags?: string[];
+  };
+}
+
+const { title, description, locale, ogImage, canonicalPath, post } = Astro.props;
+const siteName = SITE.author[locale];
+const fullTitle = `${title} — ${siteName}`;
+const desc = description ?? `${siteName} — personal blog`;
+const canonical = canonicalPath
+  ? new URL(canonicalPath, SITE.domain).href
+  : new URL(Astro.url.pathname, SITE.domain).href;
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE.author.en,
+  jobTitle: "CTO",
+  url: SITE.domain,
+  sameAs: Object.values(SITE.socials),
+};
+
+const blogPostJsonLd = post ? {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description: desc,
+  url: canonical,
+  datePublished: post.date.toISOString(),
+  inLanguage: locale,
+  author: {
+    "@type": "Person",
+    name: SITE.author[locale],
+    url: SITE.domain,
+  },
+  ...(post.tags?.length ? { keywords: post.tags.join(", ") } : {}),
+  ...(ogImage ? { image: new URL(ogImage, SITE.domain).href } : {}),
+} : null;
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={desc} />
+<meta name="author" content={SITE.author[locale]} />
+<link rel="canonical" href={canonical} />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={desc} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content={siteName} />
+{ogImage && <meta property="og:image" content={new URL(ogImage, SITE.domain).href} />}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={desc} />
+
+{locales.map((l) => (
+  <link
+    rel="alternate"
+    hreflang={l}
+    href={new URL(switchLocalePath(Astro.url, l), SITE.domain).href}
+  />
+))}
+<link
+  rel="alternate"
+  hreflang="x-default"
+  href={new URL(getLocalePath("en"), SITE.domain).href}
+/>
+
+<script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
+{blogPostJsonLd && (
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostJsonLd)} />
+)}

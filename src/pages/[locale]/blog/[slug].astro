@@ -1,0 +1,34 @@
+---
+import Post from "../../../layouts/Post.astro";
+import { getCollection, render } from "astro:content";
+import { locales, type Locale } from "../../../consts";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return locales.flatMap((siteLocale) =>
+    posts.map((post) => ({
+      params: { locale: siteLocale, slug: post.id },
+      props: { post, siteLocale },
+    }))
+  );
+}
+
+const { post, siteLocale } = Astro.props;
+const { Content, headings } = await render(post);
+---
+
+<Post
+  title={post.data.title}
+  description={post.data.description}
+  date={post.data.date}
+  locale={post.data.locale as Locale}
+  siteLocale={siteLocale as Locale}
+  postId={post.id}
+  tags={post.data.tags}
+  readingTime={post.data.readingTime as number}
+  toc={post.data.toc}
+  headings={headings}
+  translations={post.data.translations}
+>
+  <Content />
+</Post>
