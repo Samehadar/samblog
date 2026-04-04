@@ -24,10 +24,10 @@ const dateStr = date.toLocaleDateString(pageLocale, { year: "numeric", month: "s
   <div class="post-card-meta">
     <span class:list={["lang-badge", `lang-${locale}`]}>{locale.toUpperCase()}</span>
     {habr && (
-      <a href={habr} target="_blank" rel="noopener noreferrer" class="habr-badge" onclick="event.stopPropagation()">
+      <span class="habr-badge">
         <img src="/images/habr.svg" alt="Habr" width="14" height="14" class="habr-icon" />
         Habr
-      </a>
+      </span>
     )}
     <time datetime={date.toISOString()}>{dateStr}</time>
     {readingTime && <span>&middot; {readingTime} {t("blog.readingTime")}</span>}
@@ -85,13 +85,6 @@ const dateStr = date.toLocaleDateString(pageLocale, { year: "numeric", month: "s
     border-radius: 3px;
     background-color: var(--color-bg-alt);
     border: 1px solid #629FBC;
-    text-decoration: none;
-    transition: background-color 0.15s ease, color 0.15s ease;
-  }
-  .habr-badge:hover {
-    background-color: #629FBC;
-    color: #fff;
-    text-decoration: none;
   }
   .habr-icon {
     display: block;
