@@ -7,7 +7,8 @@ import vue from "@astrojs/vue";
 import remarkReadingTime from "./src/plugins/remark-reading-time.mjs";
 
 export default defineConfig({
-  site: "https://example.com",
+  site: "https://samehadar.github.io",
+  base: "/samblog",
   i18n: {
     defaultLocale: "en",
     locales: ["ru", "en", "pl"],
