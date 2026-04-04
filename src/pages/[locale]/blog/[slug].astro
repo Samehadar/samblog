@@ -26,6 +26,7 @@ const { Content, headings } = await render(post);
   postId={post.id}
   tags={post.data.tags}
   readingTime={post.data.readingTime as number}
+  habr={post.data.habr}
   toc={post.data.toc}
   headings={headings}
   translations={post.data.translations}

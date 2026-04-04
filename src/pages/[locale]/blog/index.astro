@@ -23,6 +23,7 @@ const postsForFilter = allPosts.map((post) => ({
   tags: post.data.tags,
   description: post.data.description,
   readingTime: post.data.readingTime as number,
+  habr: post.data.habr,
   href: getLocalePath(locale, `blog/${post.id}`),
 }));
 

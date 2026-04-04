@@ -14,6 +14,7 @@ interface Props {
   postId: string;
   tags: string[];
   readingTime?: number;
+  habr?: string;
   toc?: boolean;
   headings?: { depth: number; slug: string; text: string }[];
   translations?: Partial<Record<Locale, string>>;
@@ -28,6 +29,7 @@ const {
   postId,
   tags,
   readingTime,
+  habr,
   toc,
   headings = [],
   translations,
@@ -85,6 +87,12 @@ const localeLinks = Object.fromEntries(
                 ? <span class:list={["post-lang", "active", `lang-${item.locale}`]}>{item.label}</span>
                 : <a href={item.href} class:list={["post-lang", "link", `lang-${item.locale}`]}>{item.label}</a>
             )}
+            {habr && (
+              <a href={habr} target="_blank" rel="noopener noreferrer" class="habr-badge">
+                <img src="/images/habr.svg" alt="Habr" width="14" height="14" class="habr-icon" />
+                Habr
+              </a>
+            )}
             <time datetime={date.toISOString()}>
               {date.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}
             </time>
@@ -117,6 +125,12 @@ const localeLinks = Object.fromEntries(
             item.active
               ? <span class:list={["post-lang", "active", `lang-${item.locale}`]}>{item.label}</span>
               : <a href={item.href} class:list={["post-lang", "link", `lang-${item.locale}`]}>{item.label}</a>
+          )}
+          {habr && (
+            <a href={habr} target="_blank" rel="noopener noreferrer" class="habr-badge">
+              <img src="/images/habr.svg" alt="Habr" width="14" height="14" class="habr-icon" />
+              Habr
+            </a>
           )}
           <time datetime={date.toISOString()}>
             {date.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}
@@ -234,6 +248,30 @@ const localeLinks = Object.fromEntries(
   .post-lang.link.lang-ru:hover { color: #3b82f6; border-color: #3b82f6; }
   .post-lang.link.lang-en:hover { color: #10b981; border-color: #10b981; }
   .post-lang.link.lang-pl:hover { color: #f43f5e; border-color: #f43f5e; }
+
+  .habr-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #629FBC;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    background-color: var(--color-bg-alt);
+    border: 1px solid #629FBC;
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .habr-badge:hover {
+    background-color: #629FBC;
+    color: #fff;
+    text-decoration: none;
+  }
+  .habr-icon {
+    display: block;
+    border-radius: 50%;
+  }
 
   .post-tags {
     display: flex;

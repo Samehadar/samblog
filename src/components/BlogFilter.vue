@@ -24,6 +24,10 @@
       <a :href="post.href" class="post-item-link">
         <div class="post-item-meta">
           <span :class="['lang-pill', `lang-${post.locale}`]">{{ post.locale.toUpperCase() }}</span>
+          <a v-if="post.habr" :href="post.habr" target="_blank" rel="noopener noreferrer" class="habr-badge" @click.stop>
+            <img src="/images/habr.svg" alt="Habr" width="14" height="14" class="habr-icon" />
+            Habr
+          </a>
           <time :datetime="post.date">{{ formatDate(post.date) }}</time>
           <span v-if="post.readingTime">&middot; {{ post.readingTime }} {{ readingTimeLabel }}</span>
         </div>
@@ -48,6 +52,7 @@ interface Post {
   tags: string[];
   description: string;
   readingTime?: number;
+  habr?: string;
   href: string;
 }
 
@@ -163,6 +168,30 @@ function formatDate(iso: string) {
 .lang-ru { color: #3b82f6; }
 .lang-en { color: #10b981; }
 .lang-pl { color: #f43f5e; }
+
+.habr-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #629FBC;
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  background-color: var(--color-bg-alt);
+  border: 1px solid #629FBC;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.habr-badge:hover {
+  background-color: #629FBC;
+  color: #fff;
+  text-decoration: none;
+}
+.habr-icon {
+  display: block;
+  border-radius: 50%;
+}
 
 .post-item-title {
   font-family: var(--font-serif);

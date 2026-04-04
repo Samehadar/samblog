@@ -11,9 +11,10 @@ interface Props {
   description?: string;
   tags?: string[];
   readingTime?: number;
+  habr?: string;
 }
 
-const { title, slug, date, locale, pageLocale, description, tags, readingTime } = Astro.props;
+const { title, slug, date, locale, pageLocale, description, tags, readingTime, habr } = Astro.props;
 const t = useTranslations(pageLocale);
 const href = getLocalePath(pageLocale, `blog/${slug}`);
 const dateStr = date.toLocaleDateString(pageLocale, { year: "numeric", month: "short", day: "numeric" });
@@ -21,9 +22,15 @@ const dateStr = date.toLocaleDateString(pageLocale, { year: "numeric", month: "s
 
 <a href={href} class="post-card">
   <div class="post-card-meta">
+    <span class:list={["lang-badge", `lang-${locale}`]}>{locale.toUpperCase()}</span>
+    {habr && (
+      <a href={habr} target="_blank" rel="noopener noreferrer" class="habr-badge" onclick="event.stopPropagation()">
+        <img src="/images/habr.svg" alt="Habr" width="14" height="14" class="habr-icon" />
+        Habr
+      </a>
+    )}
     <time datetime={date.toISOString()}>{dateStr}</time>
     {readingTime && <span>&middot; {readingTime} {t("blog.readingTime")}</span>}
-    <span class:list={["lang-badge", `lang-${locale}`]}>{locale.toUpperCase()}</span>
   </div>
   <h3 class="post-card-title">{title}</h3>
   {description && <p class="post-card-excerpt">{description}</p>}
@@ -66,6 +73,30 @@ const dateStr = date.toLocaleDateString(pageLocale, { year: "numeric", month: "s
   .lang-badge.lang-ru { color: #3b82f6; }
   .lang-badge.lang-en { color: #10b981; }
   .lang-badge.lang-pl { color: #f43f5e; }
+
+  .habr-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #629FBC;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    background-color: var(--color-bg-alt);
+    border: 1px solid #629FBC;
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .habr-badge:hover {
+    background-color: #629FBC;
+    color: #fff;
+    text-decoration: none;
+  }
+  .habr-icon {
+    display: block;
+    border-radius: 50%;
+  }
 
   .post-card-title {
     font-family: var(--font-serif);
