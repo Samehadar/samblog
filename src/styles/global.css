@@ -291,7 +291,8 @@ html.dark .astro-code span {
 }
 
 .prose img {
-  margin: 1.25em 0;
+  display: block;
+  margin: 1.5em 0;
 }
 
 .prose hr {
