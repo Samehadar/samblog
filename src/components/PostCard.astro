@@ -1,6 +1,6 @@
 ---
 import type { Locale } from "../consts";
-import { useTranslations } from "../i18n/utils";
+import { useTranslations, getLocalePath } from "../i18n/utils";
 
 interface Props {
   title: string;
@@ -15,7 +15,7 @@ interface Props {
 
 const { title, slug, date, locale, pageLocale, description, tags, readingTime } = Astro.props;
 const t = useTranslations(pageLocale);
-const href = `/${pageLocale}/blog/${slug}`;
+const href = getLocalePath(pageLocale, `blog/${slug}`);
 const dateStr = date.toLocaleDateString(pageLocale, { year: "numeric", month: "short", day: "numeric" });
 ---
 
