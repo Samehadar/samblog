@@ -1,5 +1,5 @@
 export const SITE = {
-  domain: "https://samehadar.github.io/samblog",
+  domain: "https://lyutarevich.com",
   author: {
     ru: "Виталий Лютаревич",
     en: "Vitaly Lyutarevich",

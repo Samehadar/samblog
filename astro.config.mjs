@@ -6,11 +6,8 @@ import sitemap from "@astrojs/sitemap";
 import vue from "@astrojs/vue";
 import remarkReadingTime from "./src/plugins/remark-reading-time.mjs";
 
-const isCI = !!process.env.CI;
-
 export default defineConfig({
-  site: isCI ? "https://samehadar.github.io" : "http://localhost:4321",
-  base: isCI ? "/samblog" : "/",
+  site: "https://lyutarevich.com",
   i18n: {
     defaultLocale: "en",
     locales: ["ru", "en", "pl"],
