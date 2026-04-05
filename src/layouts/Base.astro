@@ -36,6 +36,8 @@ const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
       (function() {
         var t = localStorage.getItem("theme");
         if (t === "light") return;
+        if (t === "dark") { document.documentElement.classList.add("dark"); return; }
+        if (window.matchMedia("(prefers-color-scheme: light)").matches) return;
         document.documentElement.classList.add("dark");
       })();
     </script>
