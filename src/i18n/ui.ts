@@ -26,6 +26,7 @@ export const ui = {
     "share.copied": "Скопировано!",
     "share.copy": "Копировать ссылку",
     "about.downloadCV": "Скачать CV (PDF)",
+    "search.placeholder": "Поиск",
   },
   en: {
     "nav.blog": "Blog",
@@ -54,6 +55,7 @@ export const ui = {
     "share.copied": "Copied!",
     "share.copy": "Copy link",
     "about.downloadCV": "Download CV (PDF)",
+    "search.placeholder": "Search",
   },
   pl: {
     "nav.blog": "Blog",
@@ -82,6 +84,7 @@ export const ui = {
     "share.copied": "Skopiowano!",
     "share.copy": "Kopiuj link",
     "about.downloadCV": "Pobierz CV (PDF)",
+    "search.placeholder": "Szukaj",
   },
 } as const;
 

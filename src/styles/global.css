@@ -443,3 +443,51 @@ html.dark .astro-code span {
     color: #555;
   }
 }
+
+:root {
+  --pagefind-ui-scale: 0.9;
+  --pagefind-ui-primary: var(--color-accent);
+  --pagefind-ui-text: var(--color-text);
+  --pagefind-ui-background: var(--color-bg);
+  --pagefind-ui-border: var(--color-border);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: 8px;
+  --pagefind-ui-font: var(--font-serif);
+}
+
+.pagefind-ui__form {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.pagefind-ui__search-input {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 8px !important;
+  font-family: var(--font-serif) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.pagefind-ui__search-input:focus {
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent) 25%, transparent) !important;
+}
+
+.pagefind-ui__result-link {
+  color: var(--color-accent) !important;
+  font-family: var(--font-serif) !important;
+}
+
+.pagefind-ui__result-excerpt {
+  color: var(--color-text-muted) !important;
+  font-family: var(--font-serif) !important;
+}
+
+.pagefind-ui__message {
+  color: var(--color-text-muted) !important;
+  font-family: var(--font-serif) !important;
+}
