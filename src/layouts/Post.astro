@@ -67,7 +67,7 @@ const localeLinks = Object.fromEntries(
 
 <Base title={title} description={description} locale={siteLocale} contentLocale={locale} ogImage={ogImage} post={{ date, tags }} localeLinks={localeLinks}>
   {toc && headings.length > 0 ? (
-    <div class="post-layout has-toc">
+    <div class="post-layout has-toc article">
       <aside class="toc-sidebar">
         <nav aria-label="Table of Contents">
           <p class="toc-sidebar-title">{t("post.toc")}</p>
@@ -80,7 +80,7 @@ const localeLinks = Object.fromEntries(
           </ul>
         </nav>
       </aside>
-      <article class="post-article">
+      <article class="post-article article__content">
         <header class="post-header">
           <h1 class="post-title">{title}</h1>
           <div class="post-meta">
@@ -119,39 +119,41 @@ const localeLinks = Object.fromEntries(
       </article>
     </div>
   ) : (
-    <article class="post-article">
-      <header class="post-header">
-        <h1 class="post-title">{title}</h1>
-        <div class="post-meta">
-          {languageItems.map((item) =>
-            item.active
-              ? <span class:list={["post-lang", "active", `lang-${item.locale}`]}>{item.label}</span>
-              : <a href={item.href} class:list={["post-lang", "link", `lang-${item.locale}`]}>{item.label}</a>
-          )}
-          {habr && (
-            <a href={habr} target="_blank" rel="noopener noreferrer" class="habr-badge">
-              <img src="/images/habr.svg" alt="Habr" width="14" height="14" class="habr-icon" />
-              Habr
-            </a>
-          )}
-          <time datetime={date.toISOString()}>
-            {date.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}
-          </time>
-          {readingTime && <span>&middot; {readingTime} {t("blog.readingTime")}</span>}
-        </div>
-        {tags.length > 0 && (
-          <div class="post-tags">
-            {tags.map((tag) => <span class="tag">#{tag}</span>)}
+    <div class="article">
+      <article class="post-article article__content">
+        <header class="post-header">
+          <h1 class="post-title">{title}</h1>
+          <div class="post-meta">
+            {languageItems.map((item) =>
+              item.active
+                ? <span class:list={["post-lang", "active", `lang-${item.locale}`]}>{item.label}</span>
+                : <a href={item.href} class:list={["post-lang", "link", `lang-${item.locale}`]}>{item.label}</a>
+            )}
+            {habr && (
+              <a href={habr} target="_blank" rel="noopener noreferrer" class="habr-badge">
+                <img src="/images/habr.svg" alt="Habr" width="14" height="14" class="habr-icon" />
+                Habr
+              </a>
+            )}
+            <time datetime={date.toISOString()}>
+              {date.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}
+            </time>
+            {readingTime && <span>&middot; {readingTime} {t("blog.readingTime")}</span>}
           </div>
-        )}
-      </header>
+          {tags.length > 0 && (
+            <div class="post-tags">
+              {tags.map((tag) => <span class="tag">#{tag}</span>)}
+            </div>
+          )}
+        </header>
 
-      <div class="prose">
-        <slot />
-      </div>
+        <div class="prose">
+          <slot />
+        </div>
 
-      <ShareButtons title={title} url={Astro.url.pathname} locale={siteLocale} />
-    </article>
+        <ShareButtons title={title} url={Astro.url.pathname} locale={siteLocale} />
+      </article>
+    </div>
   )}
 
   <script>
