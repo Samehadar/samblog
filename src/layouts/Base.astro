@@ -59,6 +59,8 @@ const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
       document.querySelectorAll('a[href^="http"]').forEach((a) => {
         if (!a.href.startsWith(window.location.origin)) {
           a.classList.add("external");
+          a.setAttribute("target", "_blank");
+          a.setAttribute("rel", "noopener noreferrer");
         }
       });
     </script>
