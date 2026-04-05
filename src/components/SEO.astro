@@ -18,7 +18,7 @@ interface Props {
 const { title, description, locale, ogImage, canonicalPath, post } = Astro.props;
 const siteName = SITE.author[locale];
 const fullTitle = `${title} — ${siteName}`;
-const desc = description ?? `${siteName} — personal blog`;
+const desc = description ?? `${siteName} — CTO, engineer and mentor writing about engineering leadership, scaling teams, architecture decisions and lessons learned along the way.`;
 const canonical = canonicalPath
   ? new URL(canonicalPath, SITE.domain).href
   : new URL(Astro.url.pathname, SITE.domain).href;
