@@ -4,7 +4,9 @@
 ?path: /.+/blog/.+
 
 title: //article//header//h1
-subtitle: //article//header//div[has-class("post-meta")]//time
+
+site_name: //meta[@property="og:site_name"]/@content
+description: //meta[@property="og:description"]/@content
 
 author: //meta[@name="author"]/@content
 author_url: "https://lyutarevich.com"
