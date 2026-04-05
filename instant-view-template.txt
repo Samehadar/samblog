@@ -7,7 +7,7 @@ title: //article//header//h1
 subtitle: //article//header//div[has-class("post-meta")]//time
 
 author: //meta[@name="author"]/@content
-author_url: https://lyutarevich.com
+author_url: "https://lyutarevich.com"
 
 published_date: //article//header//time/@datetime
 
@@ -19,3 +19,7 @@ body: //article//div[has-class("prose")]
 @remove: //div[has-class("heading-anchor")]
 @remove: //script
 @remove: //style
+
+# Fix nested elements not supported by IV
+@split_parent: //p//img
+@split_parent: //p//pre
