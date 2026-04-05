@@ -15,6 +15,7 @@ interface Props {
   tags: string[];
   readingTime?: number;
   habr?: string;
+  ogImage?: string;
   toc?: boolean;
   headings?: { depth: number; slug: string; text: string }[];
   translations?: Partial<Record<Locale, string>>;
@@ -30,6 +31,7 @@ const {
   tags,
   readingTime,
   habr,
+  ogImage,
   toc,
   headings = [],
   translations,
@@ -63,7 +65,7 @@ const localeLinks = Object.fromEntries(
 ) as Partial<Record<Locale, string>>;
 ---
 
-<Base title={title} description={description} locale={siteLocale} contentLocale={locale} post={{ date, tags }} localeLinks={localeLinks}>
+<Base title={title} description={description} locale={siteLocale} contentLocale={locale} ogImage={ogImage} post={{ date, tags }} localeLinks={localeLinks}>
   {toc && headings.length > 0 ? (
     <div class="post-layout has-toc">
       <aside class="toc-sidebar">

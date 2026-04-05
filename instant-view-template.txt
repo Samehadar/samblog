@@ -1,0 +1,21 @@
+~version: "2.1"
+
+# Apply only to blog post pages
+?path: /.+/blog/.+
+
+title: //article//header//h1
+subtitle: //article//header//div[has-class("post-meta")]//time
+
+author: //meta[@name="author"]/@content
+author_url: https://lyutarevich.com
+
+published_date: //article//header//time/@datetime
+
+image_url: //meta[@property="og:image"]/@content
+
+body: //article//div[has-class("prose")]
+
+# Cleanup: remove non-content elements from body
+@remove: //div[has-class("heading-anchor")]
+@remove: //script
+@remove: //style

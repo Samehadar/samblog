@@ -11,6 +11,7 @@ const blog = defineCollection({
     description: z.string(),
     toc: z.boolean().default(false),
     habr: z.string().optional(),
+    ogImage: z.string().optional(),
     translations: z
       .object({
         ru: z.string().optional(),
