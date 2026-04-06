@@ -26,6 +26,9 @@ export const ui = {
     "share.copied": "Скопировано!",
     "share.copy": "Копировать ссылку",
     "about.downloadCV": "Скачать CV (PDF)",
+    "404.title": "Страница не найдена",
+    "404.text": "Кажется, эта страница убежала. Или её никогда не было.",
+    "404.home": "На главную",
   },
   en: {
     "nav.blog": "Blog",
@@ -54,6 +57,9 @@ export const ui = {
     "share.copied": "Copied!",
     "share.copy": "Copy link",
     "about.downloadCV": "Download CV (PDF)",
+    "404.title": "Page not found",
+    "404.text": "This page has run away. Or maybe it never existed.",
+    "404.home": "Go home",
   },
   pl: {
     "nav.blog": "Blog",
@@ -82,6 +88,9 @@ export const ui = {
     "share.copied": "Skopiowano!",
     "share.copy": "Kopiuj link",
     "about.downloadCV": "Pobierz CV (PDF)",
+    "404.title": "Strona nie znaleziona",
+    "404.text": "Ta strona uciekła. Albo nigdy nie istniała.",
+    "404.home": "Strona główna",
   },
 } as const;
 
