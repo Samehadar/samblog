@@ -5,3 +5,4 @@ dist/
 .env
 TODO.md
 CONTENT_PLAN.md
+.cursor/rules/gtv-visa.mdc
