@@ -59,12 +59,19 @@ const Content = mentorshipPage ? (await renderEntry(mentorshipPage)).Content : n
       };
     })(window, "https://app.cal.com/embed/embed.js", "init");
     Cal("init", {origin: "https://cal.com"});
-    Cal("ui", {
-      styles: {branding: {brandColor: "#e8590c"}},
-      hideEventTypeDetails: false,
-      layout: "month_view",
-      theme: "dark"
-    });
+    function updateCalBtnTheme() {
+      var t = document.documentElement.classList.contains("dark") ? "dark" : "light";
+      var btn = document.querySelector("[data-cal-link]");
+      if (btn) btn.setAttribute("data-cal-config", JSON.stringify({layout: "month_view", theme: t}));
+      Cal("ui", {
+        styles: {branding: {brandColor: "#e8590c"}},
+        hideEventTypeDetails: false,
+        layout: "month_view",
+        theme: t
+      });
+    }
+    updateCalBtnTheme();
+    new MutationObserver(updateCalBtnTheme).observe(document.documentElement, {attributes: true, attributeFilter: ["class"]});
   </script>
 </Base>
 
