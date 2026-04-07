@@ -1,0 +1,61 @@
+---
+title: "Project Reactor: реактивное программирование в Java"
+date: 2018-08-23
+locale: "ru"
+tags: ["talks", "java", "reactor", "reactive", "spring"]
+description: "Доклад о Project Reactor — имплементации Reactive Streams для JVM. Зачем нужен Reactor, чем отличается от RxJava, как работают Flux и Mono, и почему callback hell остался в прошлом."
+toc: true
+video: true
+---
+
+Нашел свою старую, анимешную, очень классную по дизайну, презу со времен работы в Райфе. Она мне так нравится, что я решил выложить сюда, не смотря на содержание доклада :^)
+
+[Презентация (OneDrive)](https://1drv.ms/p/c/d67353f9c21d3521/IQA8iDUtTyvcQ4sonIWg3U1JAfOi8Il5haRzmnMKG5oWCk0?e=2U7NeJ)
+
+---
+
+## Что такое Reactor
+
+![Reactive Streams JVM](/images/projectreactoranime.gif)
+
+Reactor Core — это имплементация спецификации Reactive Streams JVM и части ReactiveX-операторов. Сам jar не имеет отношения к Spring — это атомарная библиотека, которая базируется на двух классах: Mono и Flux.
+
+![Java 9 Flow API](/images/blog/talk-reactor-project/slide5.png)
+
+Реактивное программирование — это программирование с асинхронными потоками данных. Шины событий, события нажатий на кнопки — всё это примеры асинхронных событийных потоков. Реактивность выжимает максимум из этой идеи: потоки можно создавать из чего угодно — переменных, пользовательского ввода, кеша, структур данных.
+
+## Зачем нужен Reactor, если есть RxJava
+
+![Why users want Reactor?](/images/blog/talk-reactor-project/callback-hell.png)
+
+RxJava принадлежит коммерческой компании Netflix. Они завязаны на backward compatibility и вынуждены поддерживать Java 6 API, потому что 70% пользователей — Android-разработчики.
+
+Reactor разработан Pivotal совместно с Java-сообществом. История: первая версия стримов работала быстро, но не соответствовала Reactive Streams манифесту. Вторая версия соответствовала, но провалилась. После экзистенциального кризиса и коллаборации с Cloud Foundry Java Client и Spring 5 — появился Reactor 3.
+
+![Бенчмарк: Reactor vs RxJava vs Java Streams](/images/blog/talk-reactor-project/slide15.png)
+
+## Проблемы с колбэками и Future
+
+Два основных способа написать асинхронный код в Java:
+
+- **Callbacks** — метод без возвращаемого значения, принимающий лямбду, которая вызывается после события. Плохо поддаются композиции, быстро превращаются в callback hell.
+- **Futures** — объект, обещающий вернуть значение в будущем. Умеет блокироваться для ожидания результата, но этого недостаточно для сложных цепочек.
+
+Пример: показать пользователю 5 топовых мемов, а если их нет — сходить в сервис предложений. Три сервиса, timeout 800 мс, fallback на кэш. В Reactor — просто цепочка операторов `timeout` и `onErrorResume`.
+
+## Flux и Mono
+
+**Flux** — имплементация Publisher, последовательность из 0..N элементов. Три сигнала: onNext, onComplete, onError — все опциональны. `Flux.interval()` — бесконечная последовательность тиков.
+
+![Flux diagram](/images/blog/talk-reactor-project/flux.png)
+
+**Mono** — имплементация Publisher, не более 1 элемента. Может быть пустым (`Mono.empty()`), использоваться как fire-and-forget задача (`Mono<Void>`). Если знакомы с RxJava — это коктейль из Single + Maybe.
+
+![Mono diagram](/images/blog/talk-reactor-project/mono.png)
+
+## Ссылки
+
+- [Project Reactor](https://projectreactor.io/)
+- [Reactive Streams JVM](https://github.com/reactive-streams/reactive-streams-jvm)
+- [ReactiveX Operators](http://reactivex.io/documentation/operators.html)
+- [Доклад от Pivotal](https://www.youtube.com/watch?v=ctZGFTI3XI8&t=225s)
