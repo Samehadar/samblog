@@ -12,9 +12,10 @@ interface Props {
   tags?: string[];
   readingTime?: number;
   habr?: string;
+  video?: boolean;
 }
 
-const { title, slug, date, locale, pageLocale, description, tags, readingTime, habr } = Astro.props;
+const { title, slug, date, locale, pageLocale, description, tags, readingTime, habr, video } = Astro.props;
 const t = useTranslations(pageLocale);
 const href = getLocalePath(pageLocale, `blog/${slug}`);
 const dateStr = date.toLocaleDateString(pageLocale, { year: "numeric", month: "short", day: "numeric" });
@@ -23,6 +24,9 @@ const dateStr = date.toLocaleDateString(pageLocale, { year: "numeric", month: "s
 <a href={href} class="post-card">
   <div class="post-card-meta">
     <span class:list={["lang-badge", `lang-${locale}`]}>{locale.toUpperCase()}</span>
+    {video && (
+      <span class="video-badge">&#9654; Video</span>
+    )}
     {habr && (
       <span class="habr-badge">
         <img src="/images/habr.svg" alt="Habr" width="14" height="14" class="habr-icon" />
@@ -73,6 +77,16 @@ const dateStr = date.toLocaleDateString(pageLocale, { year: "numeric", month: "s
   .lang-badge.lang-ru { color: #3b82f6; }
   .lang-badge.lang-en { color: #10b981; }
   .lang-badge.lang-pl { color: #f43f5e; }
+
+  .video-badge {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    color: var(--color-accent);
+    background-color: var(--color-bg-alt);
+    border: 1px solid var(--color-accent);
+  }
 
   .habr-badge {
     display: inline-flex;

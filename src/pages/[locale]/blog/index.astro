@@ -24,6 +24,7 @@ const postsForFilter = allPosts.map((post) => ({
   description: post.data.description,
   readingTime: post.data.readingTime as number,
   habr: post.data.habr,
+  video: post.data.video,
   href: getLocalePath(locale, `blog/${post.id}`),
 }));
 

@@ -295,6 +295,13 @@ html.dark .astro-code span {
   margin: 1.5em 0;
 }
 
+.prose iframe {
+  display: block;
+  max-width: 100%;
+  margin: 1.5em 0;
+  border-radius: 8px;
+}
+
 .prose hr {
   border: 0;
   border-top: 1px solid var(--color-border);

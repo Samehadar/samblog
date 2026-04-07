@@ -24,6 +24,7 @@
       <a :href="post.href" class="post-item-link">
         <div class="post-item-meta">
           <span :class="['lang-pill', `lang-${post.locale}`]">{{ post.locale.toUpperCase() }}</span>
+          <span v-if="post.video" class="video-badge">&#9654; Video</span>
           <a v-if="post.habr" :href="post.habr" target="_blank" rel="noopener noreferrer" class="habr-badge" @click.stop>
             <img src="/images/habr.svg" alt="Habr" width="14" height="14" class="habr-icon" />
             Habr
@@ -53,6 +54,7 @@ interface Post {
   description: string;
   readingTime?: number;
   habr?: string;
+  video?: boolean;
   href: string;
 }
 
@@ -168,6 +170,16 @@ function formatDate(iso: string) {
 .lang-ru { color: #3b82f6; }
 .lang-en { color: #10b981; }
 .lang-pl { color: #f43f5e; }
+
+.video-badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  color: var(--color-accent);
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--color-accent);
+}
 
 .habr-badge {
   display: inline-flex;
