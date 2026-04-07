@@ -1,0 +1,106 @@
+---
+import { getCollection, render as renderEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { locales, type Locale } from "../../consts";
+import { useTranslations } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return locales.map((l) => ({ params: { locale: l } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = useTranslations(locale);
+
+const pages = await getCollection("pages");
+const mentorshipPage = pages.find(
+  (p) => p.id.startsWith("mentorship") && p.data.locale === locale
+);
+const Content = mentorshipPage ? (await renderEntry(mentorshipPage)).Content : null;
+---
+
+<Base title={t("nav.mentorship")} locale={locale}>
+  <div class="mentorship-page">
+    <h1 class="page-heading">{t("nav.mentorship")}</h1>
+
+    {Content ? (
+      <div class="prose">
+        <Content />
+      </div>
+    ) : (
+      <p>Content not found.</p>
+    )}
+  </div>
+
+  <script is:inline>
+    (function (C, A, L) {
+      let p = function (a, ar) { a.q.push(ar); };
+      let d = C.document;
+      C.Cal = C.Cal || function () {
+        let cal = C.Cal;
+        let ar = arguments;
+        if (!cal.loaded) {
+          cal.ns = {};
+          cal.q = cal.q || [];
+          d.head.appendChild(d.createElement("script")).src = A;
+          cal.loaded = true;
+        }
+        if (ar[0] === L) {
+          const api = function () { p(api, arguments); };
+          const namespace = ar[1];
+          api.q = api.q || [];
+          if (typeof namespace === "string") {
+            cal.ns[namespace] = cal.ns[namespace] || api;
+            p(cal.ns[namespace], ar);
+            p(cal, ["initNamespace", namespace]);
+          } else p(cal, ar);
+          return;
+        }
+        p(cal, ar);
+      };
+    })(window, "https://app.cal.com/embed/embed.js", "init");
+    Cal("init", {origin: "https://cal.com"});
+    Cal("ui", {
+      styles: {branding: {brandColor: "#e8590c"}},
+      hideEventTypeDetails: false,
+      layout: "month_view",
+      theme: "dark"
+    });
+  </script>
+</Base>
+
+<style>
+  .mentorship-page {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .page-heading {
+    font-family: var(--font-serif);
+    font-size: 2.5586rem;
+    font-weight: bold;
+    line-height: 1;
+    margin: 1rem 0 0.5rem;
+    color: var(--color-text);
+  }
+
+  .mentorship-page :global(.cal-book-btn) {
+    display: block;
+    width: 100%;
+    padding: 1rem 2rem;
+    margin: 1.5rem 0;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--color-accent);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s ease;
+  }
+
+  .mentorship-page :global(.cal-book-btn:hover) {
+    background: var(--color-accent-hover);
+  }
+</style>
