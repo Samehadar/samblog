@@ -114,6 +114,28 @@ const visibleLinks = d.links.filter((l: { ruOnly?: boolean }) => !l.ruOnly || lo
     color: var(--color-text-faint);
   }
 
+  .thing-detail :global(.timer-link) {
+    display: inline-block;
+    font-family: var(--font-serif);
+    font-size: 1.087rem;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    padding: 0.4em 1.2em;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+    margin-top: 0.5rem;
+  }
+
+  .thing-detail :global(.timer-link:hover) {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  .thing-detail :global(.prose h2) {
+    color: var(--color-accent);
+  }
+
   .back-link {
     margin-top: 3rem;
     padding-top: 1.5rem;
