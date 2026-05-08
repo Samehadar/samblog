@@ -7,6 +7,7 @@ interface Props {
   slug: string;
   date: Date;
   locale: Locale;
+  availableLocales?: Locale[];
   pageLocale: Locale;
   description?: string;
   tags?: string[];
@@ -15,15 +16,18 @@ interface Props {
   video?: boolean;
 }
 
-const { title, slug, date, locale, pageLocale, description, tags, readingTime, habr, video } = Astro.props;
+const { title, slug, date, locale, availableLocales, pageLocale, description, tags, readingTime, habr, video } = Astro.props;
 const t = useTranslations(pageLocale);
 const href = getLocalePath(pageLocale, `blog/${slug}`);
 const dateStr = date.toLocaleDateString(pageLocale, { year: "numeric", month: "short", day: "numeric" });
+const localesToShow = availableLocales && availableLocales.length > 0 ? availableLocales : [locale];
 ---
 
 <a href={href} class="post-card">
   <div class="post-card-meta">
-    <span class:list={["lang-badge", `lang-${locale}`]}>{locale.toUpperCase()}</span>
+    {localesToShow.map((l) => (
+      <span class:list={["lang-badge", `lang-${l}`]}>{l.toUpperCase()}</span>
+    ))}
     {video && (
       <span class="video-badge">&#9654; Video</span>
     )}

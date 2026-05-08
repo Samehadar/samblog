@@ -23,7 +23,11 @@
     <article v-for="post in filtered" :key="post.slug" class="post-item">
       <a :href="post.href" class="post-item-link">
         <div class="post-item-meta">
-          <span :class="['lang-pill', `lang-${post.locale}`]">{{ post.locale.toUpperCase() }}</span>
+          <span
+            v-for="loc in localesOf(post)"
+            :key="loc"
+            :class="['lang-pill', `lang-${loc}`]"
+          >{{ loc.toUpperCase() }}</span>
           <span v-if="post.video" class="video-badge">&#9654; Video</span>
           <a v-if="post.habr" :href="post.habr" target="_blank" rel="noopener noreferrer" class="habr-badge" @click.stop>
             <img src="/images/habr.svg" alt="Habr" width="14" height="14" class="habr-icon" />
@@ -50,6 +54,7 @@ interface Post {
   title: string;
   date: string;
   locale: string;
+  availableLocales?: string[];
   tags: string[];
   description: string;
   readingTime?: number;
@@ -79,9 +84,15 @@ const allTags = computed(() => {
   return [...tags].sort();
 });
 
+function localesOf(post: Post): string[] {
+  return post.availableLocales && post.availableLocales.length > 0
+    ? post.availableLocales
+    : [post.locale];
+}
+
 const filtered = computed(() => {
   return props.posts.filter((p) => {
-    if (selectedLang.value && p.locale !== selectedLang.value) return false;
+    if (selectedLang.value && !localesOf(p).includes(selectedLang.value)) return false;
     if (selectedTag.value && !p.tags.includes(selectedTag.value)) return false;
     return true;
   });

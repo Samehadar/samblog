@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
 import { SITE, locales, type Locale } from "../../consts";
-import { useTranslations, getLocalePath } from "../../i18n/utils";
+import { useTranslations, getLocalePath, groupPostsByTranslation } from "../../i18n/utils";
 
 export function getStaticPaths() {
   return locales.map((l) => ({ params: { locale: l } }));
@@ -14,8 +14,8 @@ const t = useTranslations(locale);
 const author = SITE.author[locale];
 
 const allPosts = await getCollection("blog");
-const recentPosts = allPosts
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+const recentGroups = groupPostsByTranslation(allPosts, locale)
+  .sort((a, b) => b.canonical.data.date.valueOf() - a.canonical.data.date.valueOf())
   .slice(0, 5);
 ---
 
@@ -37,18 +37,19 @@ const recentPosts = allPosts
   <section class="recent-posts">
     <h2 class="section-title">{t("home.recentPosts")}</h2>
     <div class="posts-list">
-      {recentPosts.map((post) => (
+      {recentGroups.map(({ canonical, availableLocales }) => (
         <PostCard
-          title={post.data.title}
-          slug={post.id}
-          date={post.data.date}
-          locale={post.data.locale as Locale}
+          title={canonical.data.title}
+          slug={canonical.id}
+          date={canonical.data.date}
+          locale={canonical.data.locale as Locale}
+          availableLocales={availableLocales}
           pageLocale={locale}
-          description={post.data.description}
-          tags={post.data.tags}
-          readingTime={post.data.readingTime as number}
-          habr={post.data.habr}
-          video={post.data.video}
+          description={canonical.data.description}
+          tags={canonical.data.tags}
+          readingTime={canonical.data.readingTime as number}
+          habr={canonical.data.habr}
+          video={canonical.data.video}
         />
       ))}
     </div>

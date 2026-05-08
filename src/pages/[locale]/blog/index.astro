@@ -3,7 +3,7 @@ import Base from "../../../layouts/Base.astro";
 import BlogFilter from "../../../components/BlogFilter.vue";
 import { getCollection } from "astro:content";
 import { locales, type Locale } from "../../../consts";
-import { useTranslations, getLocalePath } from "../../../i18n/utils";
+import { useTranslations, getLocalePath, groupPostsByTranslation } from "../../../i18n/utils";
 
 export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
@@ -12,23 +12,27 @@ export function getStaticPaths() {
 const locale = Astro.params.locale as Locale;
 const t = useTranslations(locale);
 
-const allPosts = (await getCollection("blog"))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const allPosts = await getCollection("blog");
+const groups = groupPostsByTranslation(allPosts, locale)
+  .sort((a, b) => b.canonical.data.date.getTime() - a.canonical.data.date.getTime());
 
-const postsForFilter = allPosts.map((post) => ({
-  slug: post.id,
-  title: post.data.title,
-  date: post.data.date.toISOString(),
-  locale: post.data.locale,
-  tags: post.data.tags,
-  description: post.data.description,
-  readingTime: post.data.readingTime as number,
-  habr: post.data.habr,
-  video: post.data.video,
-  href: getLocalePath(locale, `blog/${post.id}`),
+const postsForFilter = groups.map(({ canonical, availableLocales }) => ({
+  slug: canonical.id,
+  title: canonical.data.title,
+  date: canonical.data.date.toISOString(),
+  locale: canonical.data.locale,
+  availableLocales,
+  tags: canonical.data.tags,
+  description: canonical.data.description,
+  readingTime: canonical.data.readingTime as number,
+  habr: canonical.data.habr,
+  video: canonical.data.video,
+  href: getLocalePath(locale, `blog/${canonical.id}`),
 }));
 
-const languages = [...new Set(allPosts.map((p) => p.data.locale))].sort();
+const languages = locales.filter((l) =>
+  groups.some(({ availableLocales }) => availableLocales.includes(l)),
+);
 ---
 
 <Base title={t("blog.title")} locale={locale}>

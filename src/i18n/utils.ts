@@ -1,3 +1,4 @@
+import type { CollectionEntry } from "astro:content";
 import { ui, type UIKey } from "./ui";
 import { defaultLocale, type Locale, locales } from "../consts";
 
@@ -35,4 +36,61 @@ export function switchLocalePath(
     pathSegments.unshift(targetLocale);
   }
   return base + "/" + pathSegments.join("/");
+}
+
+export interface PostGroup {
+  canonical: CollectionEntry<"blog">;
+  availableLocales: Locale[];
+  slugByLocale: Partial<Record<Locale, string>>;
+}
+
+export function groupPostsByTranslation(
+  posts: CollectionEntry<"blog">[],
+  preferredLocale: Locale,
+): PostGroup[] {
+  const byId = new Map(posts.map((p) => [p.id, p]));
+  const visited = new Set<string>();
+  const groups: PostGroup[] = [];
+
+  for (const post of posts) {
+    if (visited.has(post.id)) continue;
+
+    const queue: CollectionEntry<"blog">[] = [post];
+    const groupPosts: CollectionEntry<"blog">[] = [];
+    while (queue.length > 0) {
+      const p = queue.shift()!;
+      if (visited.has(p.id)) continue;
+      visited.add(p.id);
+      groupPosts.push(p);
+      const t = p.data.translations;
+      if (t) {
+        for (const slug of Object.values(t)) {
+          if (slug && byId.has(slug) && !visited.has(slug)) {
+            queue.push(byId.get(slug)!);
+          }
+        }
+      }
+    }
+
+    const slugByLocale: Partial<Record<Locale, string>> = {};
+    for (const p of groupPosts) {
+      slugByLocale[p.data.locale as Locale] = p.id;
+    }
+
+    let canonical = groupPosts.find((p) => p.data.locale === preferredLocale);
+    if (!canonical) {
+      const sorted = [...groupPosts].sort(
+        (a, b) =>
+          locales.indexOf(a.data.locale as Locale) -
+          locales.indexOf(b.data.locale as Locale),
+      );
+      canonical = sorted[0];
+    }
+
+    const availableLocales = locales.filter((l) => slugByLocale[l]);
+
+    groups.push({ canonical, availableLocales, slugByLocale });
+  }
+
+  return groups;
 }
