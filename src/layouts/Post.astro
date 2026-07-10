@@ -3,7 +3,7 @@ import Base from "./Base.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import ShareButtons from "../components/ShareButtons.astro";
 import { useTranslations, getLocalePath } from "../i18n/utils";
-import { type Locale, locales } from "../consts";
+import { type Locale } from "../consts";
 
 interface Props {
   title: string;
@@ -56,16 +56,19 @@ if (translations) {
   }
 }
 
-const localeLinks = Object.fromEntries(
-  locales.map((l) => {
-    if (l === locale) return [l, getLocalePath(l, `blog/${postId}`)];
-    const translatedSlug = translations?.[l];
-    return [l, getLocalePath(l, `blog/${translatedSlug || postId}`)];
-  })
-) as Partial<Record<Locale, string>>;
+const localeLinks: Partial<Record<Locale, string>> = {
+  [locale]: getLocalePath(locale, `blog/${postId}`),
+};
+if (translations) {
+  for (const [l, slug] of Object.entries(translations)) {
+    if (slug && l !== locale) {
+      localeLinks[l as Locale] = getLocalePath(l as Locale, `blog/${slug}`);
+    }
+  }
+}
 ---
 
-<Base title={title} description={description} locale={siteLocale} contentLocale={locale} ogImage={ogImage} post={{ date, tags }} localeLinks={localeLinks}>
+<Base title={title} description={description} locale={siteLocale} contentLocale={locale} ogImage={ogImage} post={{ date, tags }} localeLinks={localeLinks} canonicalPath={localeLinks[locale]}>
   {toc && headings.length > 0 ? (
     <div class="post-layout has-toc article">
       <aside class="toc-sidebar">
