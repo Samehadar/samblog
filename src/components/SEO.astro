@@ -1,6 +1,6 @@
 ---
 import { SITE, type Locale, locales } from "../consts";
-import { getLocalePath, switchLocalePath } from "../i18n/utils";
+import { switchLocalePath } from "../i18n/utils";
 
 interface Props {
   title: string;
@@ -15,13 +15,28 @@ interface Props {
   localeLinks?: Partial<Record<Locale, string>>;
 }
 
-const { title, description, locale, ogImage, canonicalPath, post } = Astro.props;
+const { title, description, locale, ogImage, canonicalPath, post, localeLinks } = Astro.props;
 const siteName = SITE.author[locale];
 const fullTitle = `${title} — ${siteName}`;
 const desc = description ?? `${siteName} — CTO, engineer and mentor writing about engineering leadership, scaling teams, architecture decisions and lessons learned along the way.`;
+const withSlash = (p: string) => (p.endsWith("/") ? p : `${p}/`);
 const canonical = canonicalPath
-  ? new URL(canonicalPath, SITE.domain).href
+  ? new URL(withSlash(canonicalPath), SITE.domain).href
   : new URL(Astro.url.pathname, SITE.domain).href;
+
+// hreflang: for posts, localeLinks holds the real translated slugs (content-locale
+// URLs), so the set is identical on every locale-prefixed copy of the page.
+// For regular pages every locale genuinely exists at the same slug.
+const hreflangs = locales
+  .map((l) => ({
+    hreflang: l,
+    path: localeLinks ? localeLinks[l] : switchLocalePath(Astro.url, l),
+  }))
+  .filter((x): x is { hreflang: Locale; path: string } => Boolean(x.path));
+
+const xDefaultPath = localeLinks
+  ? (localeLinks.en ?? Object.values(localeLinks)[0])
+  : switchLocalePath(Astro.url, "en");
 
 const resolvedOgImage = ogImage
   ? new URL(ogImage, SITE.domain).href
@@ -86,18 +101,20 @@ const blogPostJsonLd = post ? {
 <meta name="twitter:description" content={desc} />
 <meta name="twitter:image" content={resolvedOgImage} />
 
-{locales.map((l) => (
+{hreflangs.map(({ hreflang, path }) => (
   <link
     rel="alternate"
-    hreflang={l}
-    href={new URL(switchLocalePath(Astro.url, l), SITE.domain).href}
+    hreflang={hreflang}
+    href={new URL(withSlash(path), SITE.domain).href}
   />
 ))}
-<link
-  rel="alternate"
-  hreflang="x-default"
-  href={new URL(getLocalePath("en"), SITE.domain).href}
-/>
+{xDefaultPath && (
+  <link
+    rel="alternate"
+    hreflang="x-default"
+    href={new URL(withSlash(xDefaultPath), SITE.domain).href}
+  />
+)}
 
 <script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
 {blogPostJsonLd && (
