@@ -1,0 +1,86 @@
+---
+---
+<style is:global>
+  /* Post-specific styles for course notes ("ks-" components); loaded only on posts that import this kit. */
+  .post-layout.has-toc.article { max-width: 1200px; }
+  .post-layout.has-toc.article .post-article.article__content { max-width: 800px; }
+  .post-layout.has-toc.article .prose { max-width: none; }
+
+  .prose {
+    --ink: var(--color-text);
+    --muted: var(--color-text-muted);
+    --accent: var(--color-accent);
+    --accent2: var(--color-text);
+    --soft: var(--color-accent-light);
+    --soft2: var(--color-bg-alt);
+    --card: var(--color-bg-card);
+    --line: var(--color-border);
+    --good: #15803d; --good-bg: rgba(21, 128, 61, 0.12);
+    --warn: #b45309; --warn-bg: rgba(180, 83, 9, 0.12);
+    --crit: #b91c1c; --crit-bg: rgba(185, 28, 28, 0.09);
+    --prac: #6d28d9; --prac-bg: rgba(109, 40, 217, 0.10);
+  }
+  html.dark .prose {
+    --good: #4ade80; --good-bg: rgba(74, 222, 128, 0.12);
+    --warn: #fbbf24; --warn-bg: rgba(251, 191, 36, 0.12);
+    --crit: #f87171; --crit-bg: rgba(248, 113, 113, 0.10);
+    --prac: #c4b5fd; --prac-bg: rgba(196, 181, 253, 0.12);
+  }
+
+  .prose .ks-intro { font-size: 1.2rem; line-height: 1.45; }
+  .prose .ks-about { color: var(--color-text-muted); font-size: 1rem; }
+  .prose .ks-eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-accent); margin: 3.5rem 0 0; padding-top: 1.5rem; border-top: 2px solid var(--color-text); scroll-margin-top: 5rem; }
+  .prose .ks-eyebrow + h2 { margin-top: 0.35rem; }
+  .prose h2 { font-size: 1.9rem; line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance; }
+  .prose h3 { font-size: 1.35rem; margin-top: 2.4rem; }
+  .prose h4 { font-size: 1.15rem; margin-top: 1.9rem; }
+  .prose .ks-marks { margin: -0.2rem 0 0.6rem; }
+
+  .prose .ks-fig { margin: 1.25rem 0 1.5rem; }
+  .prose .ks-fig img { margin: 0; width: 100%; border-radius: 6px; border: 1px solid var(--color-border); }
+  .prose .ks-fig figcaption { font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.45; color: var(--color-text-muted); margin-top: 0.5rem; }
+  .prose .ks-hero-fig { margin-top: 0; }
+
+  .prose .ks-lead { background: var(--color-bg-alt); border-left: 4px solid var(--color-accent); border-radius: 6px; padding: 0.85rem 1.1rem; }
+  .prose .ks-big { background: var(--color-accent-light); border-left: 4px solid var(--color-accent); border-radius: 6px; padding: 0.95rem 1.15rem; }
+  .prose .ks-cap { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.45; }
+
+  .prose .ks-toc-title { font-weight: 700; font-size: 1.3rem; margin: 2rem 0 0.6rem; }
+  .prose .ks-toc ol { list-style: none; padding: 0; margin: 0.6rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 0.6rem; counter-reset: q; }
+  .prose .ks-toc li { counter-increment: q; background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 8px; padding: 0.65rem 0.8rem; margin: 0; }
+  .prose .ks-toc li::before { content: "0" counter(q); display: block; font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-accent); letter-spacing: 0.08em; }
+  .prose .ks-toc a { text-decoration: none; font-weight: 600; line-height: 1.25; }
+  .prose .ks-toc a:hover { color: var(--color-accent); }
+
+  .prose .ks-tbl { overflow-x: auto; margin: 0.8rem 0; }
+  .prose .ks-tbl table { margin: 0; font-size: 0.95rem; }
+  .prose .ks-ok { color: var(--good); font-weight: 600; }
+  .prose .ks-no { color: var(--crit); font-weight: 600; }
+  .prose table.ks-dmap td, .prose table.ks-dmap th { text-align: center; }
+  .prose table.ks-dmap td:first-child, .prose table.ks-dmap th:first-child { text-align: left; }
+  .prose .ks-dR { background: var(--good-bg); color: var(--good); font-weight: 700; }
+  .prose .ks-dU { background: var(--color-accent-light); color: var(--color-accent); font-weight: 700; }
+  .prose .ks-dS { background: var(--color-bg-alt); }
+  .prose .ks-dI { color: var(--color-text-muted); }
+
+  .prose details { border: 1px solid var(--color-border); border-radius: 8px; padding: 0.55rem 0.9rem; margin: 0.5rem 0; background: var(--color-bg-card); }
+  .prose summary { cursor: pointer; font-weight: 600; }
+  .prose details p, .prose details ul { margin: 0.6rem 0 0.2rem; }
+  .prose details.ks-ref { background: var(--color-bg-alt); }
+
+  .prose .ks-mk { display: inline-block; font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.12rem 0.45rem; border-radius: 4px; margin-right: 4px; vertical-align: 2px; white-space: nowrap; }
+  .prose .ks-mk-upd { color: var(--color-text); background: var(--color-bg-alt); border: 1px solid var(--color-border); }
+  .prose .ks-mk-add { color: var(--good); background: var(--good-bg); }
+  .prose .ks-mk-prac { color: var(--prac); background: var(--prac-bg); }
+  .prose .ks-sporno { border: 1px dashed var(--crit); background: var(--crit-bg); border-radius: 8px; padding: 0.75rem 1rem; margin: 1rem 0; font-size: 1.02rem; }
+  .prose .ks-sporno b.ks-t { display: block; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--crit); margin-bottom: 0.25rem; }
+  .prose .ks-srcs { font-size: 0.88rem; color: var(--color-text-muted); }
+  .prose .ks-srcs a { color: var(--color-text-muted); }
+  .prose .ks-src { font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; color: var(--color-text-muted); border-top: 1px dashed var(--color-border); padding-top: 0.6rem; margin-top: 1.6rem; }
+
+  .prose svg { display: block; max-width: 100%; height: auto; margin: 1rem 0; }
+  .prose svg text { font-family: var(--font-sans); }
+
+  .prose dl dt { font-weight: 700; margin-top: 0.8rem; }
+  .prose dl dd { margin: 0.1rem 0 0; }
+</style>
