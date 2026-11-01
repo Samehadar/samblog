@@ -3,7 +3,7 @@ import "../styles/global.css";
 import SEO from "../components/SEO.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import { type Locale } from "../consts";
+import { SITE, type Locale } from "../consts";
 
 interface Props {
   title: string;
@@ -21,6 +21,7 @@ interface Props {
 
 const { title, description, locale, contentLocale, ogImage, canonicalPath, post, localeLinks } = Astro.props;
 const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
+const umamiDomain = new URL(SITE.domain).hostname;
 ---
 
 <html lang={contentLocale || locale}>
@@ -29,9 +30,8 @@ const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/favicon.svg`} type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/fonts/cambria/regular.woff2`} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/fonts/cambria/bold.woff2`} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/fonts/fira/fira-sans-400-normal-latin.woff2`} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/fonts/fira/fira-sans-400-normal-cyrillic.woff2`} as="font" type="font/woff2" crossorigin />
     <SEO title={title} description={description} locale={locale} ogImage={ogImage} canonicalPath={canonicalPath} post={post} localeLinks={localeLinks} />
     <script is:inline>
       (function() {
@@ -43,7 +43,7 @@ const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
       })();
     </script>
     {umamiId && (
-      <script defer src="https://cloud.umami.is/script.js" data-website-id={umamiId} />
+      <script defer src="https://cloud.umami.is/script.js" data-website-id={umamiId} data-domains={umamiDomain} />
     )}
   </head>
   <body>

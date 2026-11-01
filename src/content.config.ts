@@ -9,6 +9,8 @@ const blog = defineCollection({
     locale: z.enum(["ru", "en", "pl"]),
     tags: z.array(z.string()).default([]),
     description: z.string(),
+    lead: z.string().optional(),
+    takeaways: z.array(z.string()).optional(),
     toc: z.boolean().default(false),
     habr: z.string().optional(),
     video: z.boolean().default(false),

@@ -16,6 +16,8 @@ interface Props {
   readingTime?: number;
   habr?: string;
   ogImage?: string;
+  lead?: string;
+  takeaways?: string[];
   toc?: boolean;
   headings?: { depth: number; slug: string; text: string }[];
   translations?: Partial<Record<Locale, string>>;
@@ -32,6 +34,8 @@ const {
   readingTime,
   habr,
   ogImage,
+  lead,
+  takeaways,
   toc,
   headings = [],
   translations,
@@ -83,7 +87,7 @@ if (translations) {
           </ul>
         </nav>
       </aside>
-      <article class="post-article article__content">
+      <article class="post-article article__content" data-post-id={postId}>
         <header class="post-header">
           <h1 class="post-title">{title}</h1>
           <div class="post-meta">
@@ -109,6 +113,20 @@ if (translations) {
             </div>
           )}
         </header>
+
+        {(lead || (takeaways && takeaways.length > 0)) && (
+          <div class="post-intro">
+            {lead && <p class="post-lead">{lead}</p>}
+            {takeaways && takeaways.length > 0 && (
+              <div class="post-takeaways">
+                <p class="post-takeaways-title">{t("post.takeaways")}</p>
+                <ul>
+                  {takeaways.map((item) => <li>{item}</li>)}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
 
         <div class="toc-inline">
           <TableOfContents headings={headings} locale={siteLocale} />
@@ -123,7 +141,7 @@ if (translations) {
     </div>
   ) : (
     <div class="article">
-      <article class="post-article article__content">
+      <article class="post-article article__content" data-post-id={postId}>
         <header class="post-header">
           <h1 class="post-title">{title}</h1>
           <div class="post-meta">
@@ -150,6 +168,20 @@ if (translations) {
           )}
         </header>
 
+        {(lead || (takeaways && takeaways.length > 0)) && (
+          <div class="post-intro">
+            {lead && <p class="post-lead">{lead}</p>}
+            {takeaways && takeaways.length > 0 && (
+              <div class="post-takeaways">
+                <p class="post-takeaways-title">{t("post.takeaways")}</p>
+                <ul>
+                  {takeaways.map((item) => <li>{item}</li>)}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+
         <div class="prose">
           <slot />
         </div>
@@ -160,6 +192,102 @@ if (translations) {
   )}
 
   <script>
+    type EventData = Record<string, string | number>;
+    const article = document.querySelector<HTMLElement>("[data-post-id]");
+    if (article) {
+      const post = article.dataset.postId || "";
+      const pending: [string, EventData][] = [];
+      const send = (name: string, data: EventData) => {
+        const umami = (window as any).umami;
+        if (umami && typeof umami.track === "function") {
+          umami.track(name, data);
+          return true;
+        }
+        return false;
+      };
+      const track = (name: string, data: EventData = {}) => {
+        const payload = { post, ...data };
+        if (!send(name, payload)) pending.push([name, payload]);
+      };
+      const flush = () => {
+        while (pending.length && send(pending[0][0], pending[0][1])) pending.shift();
+      };
+      window.addEventListener("load", flush);
+      const flushTimer = window.setInterval(() => {
+        flush();
+        if (!pending.length) window.clearInterval(flushTimer);
+      }, 2000);
+      window.setTimeout(() => window.clearInterval(flushTimer), 60000);
+
+      const prose = article.querySelector<HTMLElement>(".prose");
+      const depthMarks = [25, 50, 75, 100];
+      const depthSeen = new Set<number>();
+      const checkDepth = () => {
+        if (!prose) return;
+        const rect = prose.getBoundingClientRect();
+        if (rect.height <= 0) return;
+        const percent = ((window.innerHeight - rect.top) / rect.height) * 100;
+        for (const mark of depthMarks) {
+          if (percent >= mark && !depthSeen.has(mark)) {
+            depthSeen.add(mark);
+            track("read-depth", { depth: mark });
+          }
+        }
+      };
+      let depthQueued = false;
+      window.addEventListener("scroll", () => {
+        if (depthQueued) return;
+        depthQueued = true;
+        requestAnimationFrame(() => {
+          depthQueued = false;
+          checkDepth();
+        });
+      }, { passive: true });
+      checkDepth();
+
+      // Count only time when the tab is visible and the reader interacted within the last minute.
+      let activeSeconds = 0;
+      let lastInput = Date.now();
+      ["scroll", "mousemove", "keydown", "touchstart"].forEach((type) =>
+        window.addEventListener(type, () => { lastInput = Date.now(); }, { passive: true })
+      );
+      const timeMarks = [1, 3, 5, 10, 20];
+      const timeSeen = new Set<number>();
+      window.setInterval(() => {
+        if (document.visibilityState !== "visible" || Date.now() - lastInput > 60000) return;
+        activeSeconds += 5;
+        for (const minutes of timeMarks) {
+          if (activeSeconds >= minutes * 60 && !timeSeen.has(minutes)) {
+            timeSeen.add(minutes);
+            track("read-time", { minutes });
+          }
+        }
+      }, 5000);
+
+      document.addEventListener("click", (event) => {
+        const el = (event.target as Element | null)?.closest("a, button");
+        if (!el) return;
+        const anchor = el instanceof HTMLAnchorElement ? el : null;
+        const share = el.closest(".share-buttons");
+        if (share) {
+          const network = ["telegram", "linkedin", "twitter", "copy"].find((n) => el.classList.contains(`share-${n}`));
+          track("share", { network: network || "other" });
+          return;
+        }
+        if (anchor && anchor.hash && anchor.pathname === location.pathname) {
+          const place = el.closest(".toc-sidebar") ? "sidebar" : el.closest(".toc") ? "inline" : el.closest(".ks-toc") ? "cards" : "";
+          if (place) {
+            track("toc-click", { place, target: decodeURIComponent(anchor.hash.slice(1)).slice(0, 80) });
+            return;
+          }
+        }
+        if (anchor && anchor.host && anchor.host !== location.host) {
+          const place = el.classList.contains("habr-badge") ? "badge" : el.closest(".prose") ? "body" : "page";
+          track(anchor.host.endsWith("habr.com") ? "habr-click" : "outbound-click", { host: anchor.host, place });
+        }
+      }, { capture: true });
+    }
+
     document.querySelectorAll(".prose h2[id], .prose h3[id], .prose h4[id]").forEach((h) => {
       const a = document.createElement("a");
       a.href = `#${h.id}`;
@@ -389,5 +517,45 @@ if (translations) {
 
   @media (max-width: 640px) {
     .post-title { font-size: 2rem; }
+  }
+  .post-intro {
+    margin: 0 0 2rem;
+  }
+  .post-lead {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    line-height: 1.5;
+    color: var(--color-text);
+    margin: 0 0 1.25rem;
+    text-wrap: pretty;
+  }
+  .post-takeaways {
+    background-color: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 1rem 1.25rem 0.6rem;
+  }
+  .post-takeaways-title {
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    margin: 0 0 0.5rem;
+  }
+  .post-takeaways ul {
+    margin: 0;
+    padding-left: 1.25em;
+  }
+  .post-takeaways li {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 0.45em;
+  }
+  @media (max-width: 640px) {
+    .post-lead { font-size: 1.2rem; }
+    .post-takeaways li { font-size: 1rem; }
   }
 </style>

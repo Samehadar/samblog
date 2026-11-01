@@ -24,7 +24,7 @@ Domain: `https://lyutarevich.com`. Deployed to GitHub Pages via GitHub Actions o
 | Site constants | `src/consts.ts` |
 | SEO meta + JSON-LD | `src/components/SEO.astro` |
 | Global styles | `src/styles/global.css` |
-| Fonts | `public/fonts/cambria/` |
+| Fonts | `public/fonts/fira/` (Cambria in `public/fonts/cambria/` is no longer used) |
 | Static assets | `public/` (images, papers, robots.txt, _headers, CNAME, favicons) |
 | RSS feeds | `src/pages/rss.xml.ts`, `src/pages/[locale]/rss.xml.ts` |
 | Remark plugins | `src/plugins/remark-reading-time.mjs` |
@@ -33,7 +33,7 @@ Domain: `https://lyutarevich.com`. Deployed to GitHub Pages via GitHub Actions o
 
 ### blog
 
-Fields: `title`, `date`, `locale`, `tags`, `description`, `toc`, optional `habr` (URL to Habr article), optional `translations` (`{ ru, en, pl }`).
+Fields: `title`, `date`, `locale`, `tags`, `description`, `toc`, optional `lead` (2–3 sentence standfirst shown above the article body), optional `takeaways` (3–5 key points), optional `habr` (URL to Habr article), optional `translations` (`{ ru, en, pl }`).
 `readingTime` is computed by `remark-reading-time` plugin — not a frontmatter field.
 Posts with `habr` get a branded Habr badge in post cards and article pages.
 
@@ -52,7 +52,7 @@ Fields: `title`, `locale`, optional `updated`.
 
 - Three locales: `en` (default), `ru`, `pl`. All i18n keys must exist in all three.
 - Dark mode is the default. Theme toggle persists to localStorage.
-- Font: Cambria for all text (`--font-serif`). Preloaded in `Base.astro`.
+- Font: Fira Sans for all text, self-hosted in `public/fonts/fira/` with Latin, Latin Extended and Cyrillic subsets (`--font-serif` is the historical variable name); Fira Mono for code. Body line-height 1.6. Preloaded in `Base.astro`.
 - Blog post locale and site UI locale are decoupled — articles stay in original language regardless of UI language.
 - MDX files use `{/* */}` for comments, not `<!-- -->`.
 - No code comments unless explaining non-obvious intent.
@@ -60,7 +60,18 @@ Fields: `title`, `locale`, optional `updated`.
 
 ## Analytics
 
-[Umami](https://umami.is) (privacy-friendly, no cookies). Script injected in `Base.astro` only when `PUBLIC_UMAMI_WEBSITE_ID` env variable is set. In CI, it's read from GitHub Actions repository variable.
+[Umami](https://umami.is) (privacy-friendly, no cookies). Script injected in `Base.astro` only when `PUBLIC_UMAMI_WEBSITE_ID` env variable is set, and limited to the production hostname via `data-domains` (local dev visits are not counted). In CI, it's read from GitHub Actions repository variable.
+
+Article reading events are sent from `src/layouts/Post.astro` (each carries `post` = article id):
+
+| Event | Properties | When |
+|---|---|---|
+| `read-depth` | `depth`: 25 / 50 / 75 / 100 | The bottom of the viewport passes that share of the article body |
+| `read-time` | `minutes`: 1 / 3 / 5 / 10 / 20 | Active reading time: tab visible and reader interacted within the last minute |
+| `toc-click` | `place`: sidebar / inline / cards, `target` | Click on a table-of-contents link |
+| `habr-click` | `host`, `place`: badge / body / page | Click on a habr.com link |
+| `outbound-click` | `host`, `place` | Click on any other external link |
+| `share` | `network`: telegram / linkedin / twitter / copy | Click on a share button |
 
 ## Development
 
