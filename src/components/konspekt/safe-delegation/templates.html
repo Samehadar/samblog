@@ -1,0 +1,62 @@
+<p>Four tables you can copy into your wiki and fill in for yourself. The fields come from sections 2, 4, 5 and 6, the examples from this article. The thresholds and deadlines in them are a guide, not a norm: pick your own.</p>
+
+  <h3>1. Process card (section 2)</h3>
+  <p>Fill it in before handing work off through a process. If there's nothing to put in some field, the process isn't ready to be handed off yet.</p>
+  <div class="ks-tbl"><table>
+    <tr><th>Field</th><th>What to write</th><th>Example: hiring an engineer</th></tr>
+    <tr><td>Name and result</td><td>What comes out and in what time</td><td>A vacancy filled within 6 weeks of the request</td></tr>
+    <tr><td>Owner</td><td>One person, appointed officially and announced to the team</td><td>Head of the business unit</td></tr>
+    <tr><td>Customer</td><td>Who needs the result</td><td>The hiring team lead</td></tr>
+    <tr><td>Steps: who does what</td><td>In text, step by step; the input of a step is the output of the previous one. RACI per step if there are more than three participants</td><td>Request → HR screening → technical interview → scorecard → offer → start</td></tr>
+    <tr><td>Result criteria</td><td>For the process as a whole and for each step</td><td>Scorecard against the competency matrix; offer within the level's band; the candidate has started</td></tr>
+    <tr><td>Cadence</td><td>How often and in what form progress is reviewed</td><td>Monday, 30 minutes, the funnel per vacancy</td></tr>
+    <tr><td>Health metrics</td><td>1–3 metrics that show the process is alive</td><td>Funnel by stage, time to fill, spent from the hiring budget</td></tr>
+    <tr><td>Control points</td><td>Guardrail rules, approval steps, metrics, emergency brake (section 3)</td><td>Bands per level; offer approval; the brake “enough — the rest go into the talent pool”</td></tr>
+    <tr><td>Escalation</td><td>On which signal and to whom</td><td>Vacancy open for more than 8 weeks → CTO</td></tr>
+    <tr><td>Owner's authority and incentives</td><td>What they decide themselves, what they escalate, what they get for the result</td><td>Opens vacancies within budget; a bonus for time to fill</td></tr>
+    <tr><td>Adjacent processes</td><td>Whom the launch affects, whose resources it takes</td><td>Delivery (interviewers' hours), HR, marketing (vacancies on the site)</td></tr>
+    <tr><td>Maintenance</td><td>Who reviews the process and when</td><td>The owner, once a quarter</td></tr>
+  </table></div>
+
+  <h3>2. Project status (section 4)</h3>
+  <p>One table per project, updated weekly. The thresholds are from the example in section 4; set your own for your projects and revise them when a metric stays red with no real problem behind it.</p>
+  <div class="ks-tbl"><table>
+    <tr><th>Dimension</th><th>Metric</th><th>Value</th><th>Normal</th><th>Attention</th><th>Crisis</th><th>Assessment</th></tr>
+    <tr><td>Team</td><td>Morale score, 1–5</td><td></td><td>&gt; 4</td><td>3–4</td><td>&lt; 3</td><td></td></tr>
+    <tr><td>Quality</td><td>Bug leakage</td><td></td><td>&lt; 15%</td><td>15–30%</td><td>&gt; 30%</td><td></td></tr>
+    <tr><td>Pace</td><td>Done / promised per iteration</td><td></td><td>&gt; 80%</td><td>50–80%</td><td>&lt; 50%</td><td></td></tr>
+    <tr><td>Scope</td><td>Forecast completion of the whole scope</td><td></td><td>no delay</td><td>up to one iteration</td><td>more than an iteration</td><td></td></tr>
+    <tr><td>Money</td><td>Remaining budget against remaining work</td><td></td><td>enough with margin</td><td>just enough</td><td>overrun</td><td></td></tr>
+    <tr><td>Client</td><td>CSAT, 1–5</td><td></td><td>&gt; 4</td><td>3–4</td><td>&lt; 3</td><td></td></tr>
+    <tr><td>Schedule</td><td>Current milestone</td><td></td><td>on time</td><td>at risk</td><td>missed</td><td></td></tr>
+    <tr><td colspan="2"><b>Total</b></td><td colspan="5">Good / Warn / Critical / Uncertain. Owner: ___. What we do: ___. Deadline: ___</td></tr>
+  </table></div>
+  <p>Action rules worth writing next to the table: Warn means the project manager notifies and fixes by next week; a second Warn in a row escalates to the CTO; a third becomes Critical, with an action plan and the leadership team brought in; Uncertain means sort it out before the next snapshot.</p>
+
+  <h3>3. Weekly report to the CEO (section 5)</h3>
+  <p>One page: a line per project, details only for yellow and red ones. A link to the dashboard at the top.</p>
+  <div class="ks-tbl"><table>
+    <tr><th>Project</th><th>Status</th><th>What turned yellow or red</th><th>What we do</th><th>Who</th><th>Deadline</th><th>Help needed</th></tr>
+    <tr><td>Project A</td><td>Good</td><td>—</td><td>—</td><td></td><td></td><td></td></tr>
+    <tr><td>Project B</td><td>Warn</td><td>Pace 67%, scope an iteration behind</td><td>Cut the release scope, pulled two tasks</td><td>PM</td><td>next week</td><td>no</td></tr>
+    <tr><td>Project C</td><td>Critical</td><td>The client hasn't accepted the delivery for three weeks</td><td>Plan: a meeting with the client, daily calls</td><td>Unit head</td><td>date</td><td>yes: a CEO call to the client</td></tr>
+  </table></div>
+  <p>Recipients: the CEO, the COO and their project managers. Everyone else on request.</p>
+
+  <h3>4. Budget card (section 6)</h3>
+  <p>Fill it in when you replace approving every decision with a limit. An empty “buffer” or “overrun rule” field is a sign the budget isn't safe yet.</p>
+  <div class="ks-tbl"><table>
+    <tr><th>Field</th><th>What to write</th><th>Example: the QA guild</th></tr>
+    <tr><td>What we cap</td><td>An activity or a line item</td><td>QA's non-project activities</td></tr>
+    <tr><td>Unit</td><td>Money, hours or units</td><td>Hours</td></tr>
+    <tr><td>Owner</td><td>Who decides within the limit</td><td>Head of QA</td></tr>
+    <tr><td>Limit and period</td><td>How much and for how long</td><td>100 hours per department per quarter</td></tr>
+    <tr><td>Expected result</td><td>What we give the limit for</td><td>The guild runs, delivery doesn't suffer</td></tr>
+    <tr><td>Where the balance is visible</td><td>A spreadsheet, an accounting system or a tracker</td><td>Time logged in the tracker, a weekly report</td></tr>
+    <tr><td>Burn-rate forecast</td><td>When it runs out at the current spend</td><td>30 hours a month → lasts to the end of the quarter</td></tr>
+    <tr><td>Buffer and who holds it</td><td>A reserve for overruns and emergencies</td><td>20 hours with the CTO</td></tr>
+    <tr><td>Overrun rule</td><td>What happens when the limit is exceeded</td><td>Spent 110 — next quarter's budget is 10 lower</td></tr>
+    <tr><td>Review after the fact</td><td>When and with whom decisions are reviewed</td><td>Once a quarter in a one-on-one</td></tr>
+    <tr><td>Emergency brake</td><td>Who can close the limit and how</td><td>The CTO closes the limit until the end of the quarter</td></tr>
+  </table></div>
+  <p>The decision-rights map is filled in following the example in section 3: a row per decision type, a column per role, and in the cells — decides, approves, consulted, informed.</p>

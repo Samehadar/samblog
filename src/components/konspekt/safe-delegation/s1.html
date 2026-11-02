@@ -1,0 +1,119 @@
+<figure class="ks-fig">
+      <img src="/images/blog/bezopasnoe-delegirovanie/s1-safe.webp" width="1400" height="934" loading="lazy" alt="A toddler in a soft helmet learns to walk around a room, the furniture corners are padded, an adult calmly drinks coffee to the side">
+      <figcaption>You can run after the child and grab their hand, or you can pad the corners and put on a helmet. The second one is the safe-delegation infrastructure.</figcaption>
+    </figure>
+
+  <div class="ks-lead"><b>In short.</b> Almost every reason not to delegate — “teaching takes too long”, “they'll do it worse”, “I'll lose control”, “I'm accountable anyway” — comes down to one: a lack of trust. And trust follows transparency: when you can see how the work is going, letting go isn't scary. So don't start with “I'll hand it over and hope”. Start by making the work visible and building an environment where a mistake isn't fatal.</div>
+
+  <h3>Model: trust follows transparency</h3>
+  <svg viewBox="0 0 540 370" style="max-width:560px;margin-left:auto;margin-right:auto" role="img" aria-label="The trust and transparency matrix">
+    <defs>
+      <marker id="m1" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--accent2)"/></marker>
+      <marker id="m1r" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--crit)"/></marker>
+    </defs>
+    <g stroke="currentColor" stroke-width="1.4" style="color:var(--muted)"><line x1="60" y1="330" x2="520" y2="330"/><line x1="60" y1="330" x2="60" y2="20"/></g>
+    <text x="520" y="352" text-anchor="end" font-size="13" style="fill:var(--muted)">Transparency →</text>
+    <text x="40" y="330" font-size="13" transform="rotate(-90 40 330)" style="fill:var(--muted)">Trust →</text>
+    <g fill="none" stroke-width="1.5" style="stroke:var(--ink)">
+      <rect x="75" y="200" width="190" height="115" rx="8"/>
+      <rect x="315" y="200" width="190" height="115" rx="8"/>
+      <rect x="315" y="35" width="190" height="115" rx="8" style="fill:var(--soft);stroke:var(--accent);stroke-width:2.5"/>
+      <rect x="75" y="35" width="190" height="115" rx="8"/>
+    </g>
+    <g text-anchor="middle" font-size="14" style="fill:var(--ink)">
+      <text x="170" y="250" font-weight="700">1</text><text x="170" y="272">Can't see</text><text x="170" y="292">and don't trust</text>
+      <text x="410" y="250" font-weight="700">2</text><text x="410" y="272">Can see,</text><text x="410" y="292">don't trust yet</text>
+      <text x="410" y="85" font-weight="700">3</text><text x="410" y="107">Can see</text><text x="410" y="127">and trust</text>
+      <text x="170" y="85" font-weight="700">4</text><text x="170" y="107">Trust,</text><text x="170" y="127">lighter reporting</text>
+    </g>
+    <g stroke-width="2.2" style="stroke:var(--accent2)" marker-end="url(#m1)">
+      <line x1="267" y1="257" x2="310" y2="257"/>
+      <line x1="410" y1="198" x2="410" y2="156"/>
+      <line x1="313" y1="92" x2="271" y2="92"/>
+    </g>
+    <line x1="170" y1="152" x2="170" y2="194" stroke-width="2.2" stroke-dasharray="6 4" style="stroke:var(--crit)" marker-end="url(#m1r)"/>
+  </svg>
+  <p class="ks-cap">1 → 2: make the work visible (a process, metrics, a report). 2 → 3: trust follows transparency. 3 → 4: reporting can be lightened. 4 ⇢ 1: remove transparency entirely, and the first failure rolls trust back to zero.</p>
+
+  <p><b>The safe-delegation infrastructure.</b> There are two ways to keep a toddler safe while they learn to walk: run after them and grab their hand, or pad the furniture corners. The second way is the safe-delegation infrastructure: processes, metrics and budgets inside which a mistake gets noticed in time and doesn't become fatal (sections <a href="#s2">2</a>–<a href="#s6">6</a>).</p>
+
+  <h3>What to do</h3>
+  <ol class="ks-steps">
+    <li><b>Write down the tasks you are holding on to.</b> Go through the CTO's process map (below) and mark the ones that recur or drag on for months: those are the first candidates.</li>
+    <li><b>Assume almost anything can be handed off.</b> The question isn't “can I”, it's “is there someone to hand it to” and “are the corners padded”.</li>
+    <li><b>If there's no one to hand it to, hire someone.</b> At one company the home-grown team leads turned out to be not yet mature enough, and a middle-management layer wasn't emerging on its own. The company hired about 40% of its team leads externally and plans to raise that to 50–60%: a single CTO can't carry the whole load.</li>
+    <li><b>Keep what can't be delegated:</b> strategy, hiring and mentoring key people, your own learning. Hiring key people is any leader's top priority, and it's what takes the most off your plate.</li>
+    <li><b>Make the task transparent first, then hand it off.</b> Through a process (<a href="#s2">section 2</a>), metrics (<a href="#s4">section 4</a>) or a budget (<a href="#s6">section 6</a>).</li>
+    <li><b>Don't hand everything off at once.</b> Start with one or two tasks and build up.</li>
+    <li><b>Watch the load.</b> Keep loading the truck while it can still carry it. When dirt starts spilling over the sides, nothing more fits: stop.</li>
+  </ol>
+  <figure class="ks-fig">
+    <img src="/images/blog/bezopasnoe-delegirovanie/s1-dumptruck.webp" width="1400" height="934" loading="lazy" alt="An excavator keeps adding dirt to an overfull dump truck, dirt spills over the side">
+    <figcaption>Load the truck while it can still carry the load. Dirt over the side means “stop”, not “add more”.</figcaption>
+  </figure>
+
+  <details class="ks-ref"><summary>Reference: the CTO's process map</summary>
+    <div class="ks-tbl"><table>
+      <tr><th>Group</th><th>Processes</th></tr>
+      <tr><td>Core — create value for the customer</td><td>Delivery (the main one in any company), support, presales (if the company sells services)</td></tr>
+      <tr><td>Supporting</td><td>Hiring (often owned by HR, with the CTO as a participant or internal customer), resource management (hiring requests, exits, allocation to projects), people development and succession, motivation and retention</td></tr>
+      <tr><td>Management</td><td>Budgeting, goal setting, reporting and stakeholder work, operations management (creating and improving processes), engineering culture</td></tr>
+      <tr><td>Development</td><td>R&amp;D and hypothesis testing, employer and tech brand</td></tr>
+    </table></div>
+    <p>Classic operations management lists three groups; the fourth, development, is one I've added from experience.</p>
+  </details>
+
+  <h3>Why it works</h3>
+  <p>At the root of it all is a trust deficit, and transparency is what raises trust. Take it one step further: the fear of losing control is really the fear of not hearing about a problem in time. Transparency and the “padded corners” remove exactly that fear: you hear about a failure before it gets expensive. And the awkward “I feel bad loading people up” turns into an observable signal: you can see when someone is overloaded.</p>
+  <p>Besides distrust, three more things get in the way, and each has its own cure:</p>
+  <ul>
+    <li><b>No suitable tasks</b> — break the big ones into parts.</li>
+    <li><b>You don't know what you want yourself</b> — this is exactly where a second brain helps: fresh thinking.</li>
+    <li><b>You're afraid of losing the point of your role</b> — that's <a href="#s7">section 7</a>.</li>
+  </ul>
+  <p>And it isn't a personal weakness: the difficulty comes back at every new level. A new team lead is learning to delegate for the first time; a freshly promoted department head suddenly feels “I've lost control” all over again; and the CTO relearns it too.</p>
+  <p>Transparency means visible results and decisions, not surveillance: under constant observation people start hiding their work. And trust is built not only on transparency but on how you judge a person's ability, benevolence and integrity. <span class="ks-srcs">Sources: <a href="https://journals.sagepub.com/doi/full/10.1177/0001839212453028">Bernstein, “The Transparency Paradox”, 2012</a>; <a href="https://doi.org/10.5465/amr.1995.9508080335">Mayer, Davis, Schoorman, an integrative model of organizational trust, 1995</a>.</span></p>
+
+  <h3>Example: a CTO's task list</h3>
+  <p>The company had recently moved to a divisional structure: product business units (each with its own development team and implementation team, the latter deploying and customising the product for specific customers), outsourced projects, and staff augmentation (selling a specific person's time). Each unit has its own head, and the middle managers have settled in. The CTO picked ten main tasks for the near term and worked out which of them to hand off.</p>
+  <div class="ks-tbl"><table>
+    <tr><th>Task</th><th>Hand off?</th><th>Why</th></tr>
+    <tr><td>Bring expertise across the units up to the same level</td><td class="ks-ok">Yes</td><td>Long-running, with recurring work</td></tr>
+    <tr><td>Roll out a new delivery process</td><td class="ks-ok">Yes</td><td>A process with an owner and metrics (<a href="#s2">section 2</a>)</td></tr>
+    <tr><td>Design a budgeting process</td><td class="ks-ok">Yes</td><td>Many stakeholders, a slow task</td></tr>
+    <tr><td>Take myself out of hiring engineers and team leads</td><td class="ks-ok">Yes</td><td>Through a process and rules (<a href="#s3">section 3</a>)</td></tr>
+    <tr><td>Launch the employer and tech brand</td><td class="ks-ok">Yes</td><td>Can be capped with a time budget</td></tr>
+    <tr><td>Bring staff augmentation to 25% profitability</td><td class="ks-ok">Yes</td><td>Months of work with weekly operations</td></tr>
+    <tr><td>Repair the relationship with a client who has been unhappy for two years</td><td class="ks-ok">Yes</td><td>Needs steady work, not a one-off gesture</td></tr>
+    <tr><td>Product development strategy</td><td class="ks-no">No</td><td>The CTO's direct job</td></tr>
+    <tr><td>Mentoring a future unit head and finding a department head</td><td class="ks-no">No</td><td>Mentoring is your job; there's no one to hand it to. Hiring a manager could in theory be handed off — but if not you, then who?</td></tr>
+    <tr><td>Do my own training</td><td class="ks-no">No</td><td>Nobody will learn for you</td></tr>
+  </table></div>
+  <p>Note that tasks that look like one-offs often turn out to be long-running and full of recurring work — which means they can be handed off through a process.</p>
+
+  <h3>Where it breaks</h3>
+  <ul>
+    <li><b>Trusting without transparency.</b> Where there's chaos, distrust is born.</li>
+    <li><b>Handing everything off at once.</b> Almost any process can be handed off, but not all of them at the same time.</li>
+    <li><b>Expecting it to be done the way you would do it.</b> What's unacceptable to you may be “great” to an employee. That's solved by result criteria (<a href="#s2">section 2</a>), not by personal supervision.</li>
+    <li><b>Forgetting that the system will be tested for weak spots.</b> Just as kids pull the socket covers out of sockets, employees keep looking for where the rules can be bent. Build the infrastructure with that in mind.</li>
+  </ul>
+  <h3>Psychological safety: without it, transparency doesn't work</h3>
+  <p><b>What it is.</b> Team members' confidence that they won't be punished or ridiculed for a question, a mistake or bad news. That's how Amy Edmondson defines it. In Google's Project Aristotle, the study of what distinguishes effective teams, it came out as the most important of five factors.</p>
+  <p><b>Why delegation needs it.</b> All the reporting in this article — statuses, metrics, escalations — works only if people honestly report problems. If a red status gets punished, you'll get green reports and hidden problems.</p>
+  <p><b>How to work on it:</b></p>
+  <ol>
+    <li><b>Frame the work as a learning task,</b> not just execution: “we don't know everything in advance, so every signal matters to us”.</li>
+    <li><b>Admit you can be wrong:</b> “I may be mistaken — correct me”. Coming from the leader, this carries the most weight.</li>
+    <li><b>React to bad news productively.</b> Thank people for the early warning and ask “what do we need to fix this?”, not “whose fault is it?”.</li>
+    <li><b>Ask open questions and listen</b> — in one-on-ones and in reviews.</li>
+    <li><b>Review incidents without hunting for the guilty:</b> facts → causes in the system → actions, and make the review open to everyone.</li>
+    <li><b>Don't confuse safety with permissiveness.</b> The standards stay high: in Edmondson's terms, high standards with safety give a “learning zone”, high standards without safety an “anxiety zone”.</li>
+    <li><b>Check how things really are.</b> Add the question “can I raise a problem without fear?” to the pulse survey. If escalations have become rarer, find out whether problems are being solved or kept quiet.</li>
+  </ol>
+  <p class="ks-srcs">Sources: <a href="https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf">Edmondson, “Psychological Safety and Learning Behavior in Work Teams”, 1999</a>; <a href="https://rework.withgoogle.com/intl/en/guides/understand-team-effectiveness">Google re:Work, Understand team effectiveness</a>; <a href="https://sre.google/sre-book/postmortem-culture/">Google SRE, Postmortem culture</a>; <a href="https://psychsafety.com/wp-content/uploads/2025/05/detert2007.pdf">Detert, Burris, 2007</a>.</p>
+
+  <h3>Check yourself</h3>
+  <details><summary>Why doesn't “just trust people more” work?</summary><p>Trust is a consequence. What you raise is transparency; trust then grows by itself.</p></details>
+  <details><summary>What does a CTO not delegate?</summary><p>Strategy, hiring and mentoring key people, their own learning.</p></details>
+  <details><summary>How do you know a person can't take any more load?</summary><p>Dirt has started spilling from the truck: “the task doesn't fit — that's it, stop loading”.</p></details>

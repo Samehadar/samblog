@@ -1,0 +1,89 @@
+<figure class="ks-fig">
+      <img src="/images/blog/bezopasnoe-delegirovanie/s6-pocket.webp" width="1400" height="934" loading="lazy" alt="At a market, a girl with an envelope of pocket money picks fruit herself while her mother waits nearby with a spare purse">
+      <figcaption>An envelope of pocket money is the safest way to teach spending: freedom within the amount, and a reserve in the parent's pocket.</figcaption>
+    </figure>
+
+  <div class="ks-lead"><b>In short.</b> A budget is the next step after approving every decision. Instead of “bring me every offer for approval” — “here's the amount for the quarter, this is the result I need, decide yourself”. A budget doesn't have to be in money: hours or units are often more convenient. To be safe, a budget needs a visible balance, a burn-rate forecast and a buffer you hold back for overruns.</div>
+
+  <h3>Model: budget and budgeting</h3>
+  <p>A <b>budget</b> is a plan bounded in time: a month, a quarter, a year. <b>Budgeting</b> is a four-stage cycle: planning → execution → control (how much is left, will it last to the end of the period) → analysis (what it was spent on, what to adjust).</p>
+  <ul>
+    <li><b>Three approaches:</b> top-down (a limit by directive), bottom-up (request → summary → decision), combined (limits from above, the plan from below).</li>
+    <li><b>Two kinds:</b> financial — money in and out; operational — a limit on a specific line item: internal activities, equipment and licences, hiring, subcontracting, consulting. The operational one is often counted in hours or units and converted into money later.</li>
+    <li><b>Where the numbers come from:</b> the company's annual goals (OKRs) are broken down into quarterly ones, and the financial and operational budgets are drawn up under them. Planning goes bottom-up: request → summary → the leadership team's decision to cut or approve, taking the sales plan and reserves into account. Approval also goes up a chain, for example: teams → site lead → CEO.</li>
+  </ul>
+
+  <h3>What to do</h3>
+  <ol class="ks-steps">
+    <li><b>Find the activities that quietly creep</b> and pull people away from their main work: interviews, internal initiatives, guilds, helping finance, the brand. These are the best candidates for a budget. Especially requests for your people from other departments: instead of approving each request, give a limit of hours (“no more than 50 hours of your managers' time on designing the budgeting process”) and inside the limit don't track who gets invited to which meetings.</li>
+    <li><b>Pick the unit:</b> money, hours or units (for example, “ten IDE licences per unit”). An hour budget is often more useful than a money budget: in a services company, non-project activity lowers utilisation, and the company earns less.</li>
+    <li><b>Give the owner a budget for a result over a period:</b> “hire N people for X money this quarter”.</li>
+    <li><b>Make the spending visible:</b> the balance, the burn-rate forecast, a transparent calculation — a spreadsheet, an accounting system or time tracking in the tracker (for Jira, plugins like Tempo; for project budgets there's Folio, for example).</li>
+    <li><b>Hold a buffer yourself,</b> for overruns and emergencies, so they can be covered without going back to the leadership team. Within the overall limit, managers can also share budgets among themselves: the main thing is not to exceed the company's limit.</li>
+    <li><b>Review decisions after the fact periodically.</b> Carry the overrun into the next period's budget.</li>
+  </ol>
+
+  <h3>Why it works</h3>
+  <p>A budget gives freedom within limits: the person decides how to spend, and you see when half is gone or the money is running out. It's the safest way to teach people to spend money: you don't open the tap; you hand over a fixed sum that has to be accounted for afterwards. And a budget speeds up decisions: inside the limits there's no waiting for approval.</p>
+
+  <h3>Examples</h3>
+  <ul>
+    <li><b>Hiring.</b> The pay structure says: mid-level — 100k, senior — 200k. The budget says: “Here's 300k, hire a senior and a mid-level.” You can take a mid-level at 90 and a strong senior at 210. The budget gives more flexibility.</li>
+    <li><b>The QA guild.</b> After a reorganisation, QA lost their non-project activities — their “favourite toy”. Giving them back with no limits was risky: too much effort would have drained into them. A budget made it possible to say “yes” within hard limits: no more than 100 hours per department per quarter, time logged in the tracker. Spent 90 — well done; spent 110 — next quarter's budget shrinks.</li>
+    <li><b>Interview hours.</b> An agreement with HR: “specialists of this level — no more than 200 hours of interviews per quarter”, and those hours go into the financial model. Then a hiring push no longer drains delivery (<a href="#s2">section 2</a>).</li>
+    <li><b>Contractors.</b> A quarterly budget is carved out of the financial model (sales forecast → own resources → what's missing). There's no need to approve every contractor, even one above market rate. The main thing is to stay within the total. In my experience a contractor share of 10% or more is normal <span class="ks-mk ks-mk-prac">from experience</span> (hiring is slow, and sometimes you need to scale fast), but an overrun eats the margin down to zero, or even below.</li>
+    <li><b>Handing the team's payroll to the team lead.</b> You don't have to equalise salaries first. The team lead can spend the surplus on bonuses or on one more person — their call. A separate question is whether they can live with engineers who earn more than they do.</li>
+    <li><b>A problem client.</b> A client-hospitality budget with a limit set in advance: once it's spent and the relationship hasn't improved, you stop trying. Here the budget is an exit rule agreed beforehand.</li>
+    <li><b>A budget for mistakes in operations</b>. The team may take production down for 5 minutes per release; at 10 minutes, the next release is skipped. It's the same principle as the error budget in SRE.</li>
+  </ul>
+
+  <details class="ks-ref"><summary>Reference: what a CTO's budget consists of (from experience)</summary>
+    <ul>
+      <li>Payroll — the largest line: current salaries, hiring (offers, agencies), bonuses, overtime, retention.</li>
+      <li>Contractors and outsourcing.</li>
+      <li>Equipment and infrastructure (if there's no separate CIO).</li>
+      <li>R&amp;D and hypothesis testing.</li>
+      <li>Training: courses, conferences, books.</li>
+      <li>Travel — especially for a distributed team.</li>
+      <li>Employer brand: the team's time on marketing activities.</li>
+      <li>Team events.</li>
+      <li>AI: subscriptions, inference, agent infrastructure, verification and training.</li>
+    </ul>
+    <p>That's the generic picture; it varies. At one company the whole payroll sat with finance and only the CEO watched it. Standard positions were hired according to the headcount plan, going beyond it was approved separately, and every manager offer went through the CEO. What stayed in the CTO's budget was travel, team events, training, special equipment (test devices, for example), hours for internal activities, and contractors.</p>
+  </details>
+  <details class="ks-ref"><summary>Reference: how to plan the payroll</summary>
+    <ul>
+      <li><b>Growth:</b> an across-the-board uplift (inflation plus a percentage) or the actual trend from past years — e.g. +15% at constant headcount; adjusted for hiring plans and a buffer for retaining key people.</li>
+      <li><b>“+10%” is the average growth across the unit,</b> not a raise for everyone: some will leave, some will come.</li>
+      <li><b>Published pay bands</b> mean an uplift for everyone at once; unpublished ones are handled individually, through buffers.</li>
+      <li><b>Below-market salary plus hiring costs</b>, once recalculated, often turns out to be a workable and cheap strategy — if the company chooses it deliberately.</li>
+    </ul>
+  </details>
+
+  <h3>Where it breaks</h3>
+  <ul>
+    <li><b>No buffer.</b> The first emergency breaks the limits.</li>
+    <li><b>Giving a budget where it doesn't help.</b> The task “bring the unit to 25% profitability” is solved with a financial model and a P&amp;L, not a budget. When rolling out a new delivery process, a budget is useful at most for external consultants.</li>
+    <li><b>Expecting financial literacy without training.</b> You can't really expect it of a team lead; a project manager, more so; a head of department, reasonably. A lack of it is a reason to set a bigger buffer. Experience says people “won't learn until they start doing it”.</li>
+    <li><b>Confusing a budget with per-item limits.</b> “A laptop no more expensive than X” and the pay structure are stricter instruments than a budget.</li>
+    <li><b>One expense in two budgets.</b> They can't be reconciled afterwards: everything must roll up into the company's single financial model. Make one side the primary one: travel between two sites goes into the budget of one of them.</li>
+    <li><b>Handing off the approval of the budget itself.</b> A budget as a set of limits can be given to a head of department. Approval is the decision itself; keep it with yourself or the CFO.</li>
+    <li><b>Living without a cash-flow forecast and spending control.</b> You can live without an annual budget (see the box below); you can't live without a forecast, accountability for spend and control over it.</li>
+  </ul>
+  <div class="ks-sporno"><b class="ks-t">Counterpoint · what the research says</b>It's often said that only companies that haven't been burned yet get by without budgeting, and that the 2020 pandemic shock taught everyone to count money. But there is a deliberate approach, Beyond Budgeting: instead of an annual budget — continuous planning and allocation on demand under full financial discipline (Handelsbanken, the Norwegian IT company Miles). The annual budget is optional; the forecast, accountability and control are not. <span class="ks-srcs">Sources: <a href="https://bbrt.org/">Beyond Budgeting Round Table</a>; <a href="https://www.bcg.com/publications/2021/the-future-is-beyond-budgeting">BCG, “The future is beyond budgeting”, 2021</a>.</span></div>
+  <h3>There's more to money than the budget</h3>
+  <p>A budget answers the question “how much can be spent”. To manage money, that isn't enough: four more things are needed.</p>
+  <p><b>A cash-flow forecast.</b> The budget can balance while there isn't enough money in the account. A typical situation in a services company: salaries and contractor invoices are paid every month, while the client pays on acceptance with a delay. So next to the budget you keep a cash-flow forecast for the coming weeks and months: when money comes in and when it goes out.</p>
+  <figure class="ks-fig">
+    <img src="/images/blog/bezopasnoe-delegirovanie/s6-cashflow.webp" width="1400" height="934" loading="lazy" alt="A tank on legs: at the bottom a tap steadily fills a long row of buckets, from the pipe above only occasional drops fall, in the distance a worker is only just walking over to open the valve">
+    <figcaption>The budget balances, but the tank is almost empty: the salary buckets come every month, and the client's payment is still on its way.</figcaption>
+  </figure>
+  <p><b>Target, forecast and allocated resources — kept apart.</b> If the forecast doubles as the target and as the basis for allocating money, people start gaming it: lowballing to hit it easily, or padding it to get more. The Beyond Budgeting approach separates three things: an ambitious target, an honest forecast, and resources allocated as needed. Replanning is regular, and the rules for reallocation are agreed in advance.</p>
+  <p><b>Pay fairness — separate from the budget owner.</b> If a team lead is given the team's payroll, the criteria for fair pay are set the same for everyone: the market, the level of the role, internal comparison, the annual-raise process. Spare money in the fund must not decide what counts as a fair salary.</p>
+  <p><b>AI spending.</b> Subscriptions, inference and agent infrastructure go as a separate line, and not only IT may spend on them. Next to hour limits you set consumption limits and count the cost of a successful outcome, not of tokens. Financial limits are backed by technical ones. Time saved by agents is freed-up team capacity, not money right away.</p>
+  <p class="ks-srcs">Sources: <a href="https://www.bdc.ca/en/articles-tools/entrepreneur-toolkit/templates-business-guides/cash-flow-calculator">BDC, cash-flow forecast</a>; <a href="https://bbrt.org/">Beyond Budgeting Round Table</a>; <a href="https://handbook.gitlab.com/handbook/total-rewards/compensation/">GitLab Handbook, Compensation</a>; <a href="https://www.finops.org/framework/capabilities/allocation">FinOps, Allocation</a>; <a href="https://services.google.com/fh/files/misc/dora-roi-of-ai-assisted-software-development-2026.pdf">DORA, ROI of AI-assisted software development, 2026</a>.</p>
+
+  <h3>Check yourself</h3>
+  <details><summary>Why is a budget better than approving every offer?</summary><p>No need to approve every decision: control runs through the balance, the forecast and the review after the fact.</p></details>
+  <details><summary>Which activities are best capped with a budget?</summary><p>The ones that quietly creep and pull people away from their main work. Often in hours rather than money.</p></details>
+  <details><summary>Why hold the buffer yourself?</summary><p>To cover overruns and emergencies without a separate approval from above.</p></details>

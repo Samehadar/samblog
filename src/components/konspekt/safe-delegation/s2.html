@@ -1,0 +1,65 @@
+<figure class="ks-fig">
+      <img src="/images/blog/bezopasnoe-delegirovanie/s2-relay-v2.webp" width="1400" height="934" loading="lazy" alt="A relay race: a runner passes the baton on the move to the next one inside the marked zone, another pair runs ahead, an official with a flag stands at the finish">
+      <figcaption>A process is a relay: everyone runs towards the same finish, the baton is passed on the move inside a marked zone, and the official has a flag to stop the race.</figcaption>
+    </figure>
+
+  <div class="ks-lead"><b>In short.</b> A process is one of the most effective ways to hand off recurring or long-running work. People get steps and result criteria; you get transparency and a point where the process can be stopped. Describe the process just enough for everyone involved to understand who does what in the same way. But a process costs money, so first check whether it will pay for itself.</div>
+
+  <h3>Model: the elements of a process</h3>
+  <p>A <b>business process</b> is a recurring sequence of actions that produces a result: a product or a service, an artefact or a decision. It has six elements:</p>
+  <ul>
+    <li><b>owner</b> — accountable for the result of the whole process;</li>
+    <li><b>customer</b> — whoever needs the result, usually an internal customer (for hiring, that's the hiring manager);</li>
+    <li><b>the people doing the work</b> at each step;</li>
+    <li><b>inputs and outputs</b> of each step: the output of one step is the input of the next;</li>
+    <li><b>resources</b> — people, time, money;</li>
+    <li><b>actions</b> — what exactly is done at the step.</li>
+  </ul>
+  <p><b>RACI</b> helps assign responsibility per step: R — does the work, A — accountable for the step (not necessarily doing it), C — consulted, I — informed.</p>
+
+  <h3>What to do</h3>
+  <ol class="ks-steps">
+    <li><b>Check whether a process is needed.</b> It is, if the work recurs or drags on for months, involves several people (if one person does it all, there's nothing to formalise), and the process will pay back its design, maintenance and updates.</li>
+    <li><b>Write down on paper how you actually do it.</b> That's the basis of the process. Then improve it in short cycles: hypothesis → pilot → measure → lock in (the PDCA cycle). Ready-made approaches exist: Lean and value-stream mapping, Kanban, Goldratt's theory of constraints; and ITIL doesn't have to be adopted wholesale — you adapt it. <span class="ks-srcs">(<a href="https://asq.org/quality-resources/dmaic">ASQ: DMAIC</a>; <a href="https://kanbanguides.org/the-kanban-guide">The Kanban Guide</a>)</span> The CTO's process map is in <a href="#s1">section 1</a>.</li>
+    <li><b>Appoint the owner officially and announce it to the team.</b> An unappointed owner is not an owner.</li>
+    <li><b>Define the participants and the result criteria</b> for the process and for each step, the cadence (usually weekly) and the health metrics (<a href="#s4">section 4</a>).</li>
+    <li><b>Agree the owner's authority and incentives:</b> what they decide themselves, what they escalate, and what they get for the result.</li>
+    <li><b>Work through stakeholder expectations.</b> For example, your stepping out of hiring affects HR, and launching the brand affects marketing.</li>
+    <li><b>Check the adjacent processes:</b> will the new process take someone else's resources?</li>
+    <li><b>Launch, let go and don't interfere.</b> From then on you get the owner's weekly report and the metrics, and you step in on escalation if the metrics get worse (<a href="#s3">section 3</a>).</li>
+  </ol>
+
+  <h3>Why it works</h3>
+  <p>A process answers the three questions delegation usually breaks on: what to do (the steps), what counts as a good result (criteria at every step) and where we are now (visibility). The important decisions still stay with you: the last step of the process is your approval. And visibility can be literal: in BPM systems you can open the process model and see which step every request is at right now.</p>
+
+  <h3>Example: a single delivery process</h3>
+  <p>The CTO decided to bring order to delivery across all business units and handed the task off through a process:</p>
+  <ol>
+    <li>Owner — the head of the unit the changes will affect the most.</li>
+    <li>Participants — the people responsible for delivery on projects: PMs and team leads.</li>
+    <li>A reference process, criteria and a weekly sync.</li>
+    <li>Project health indicators.</li>
+    <li>Plans, KPIs and incentives per project.</li>
+    <li>KPIs, incentives and authority of the process owner.</li>
+    <li>Launch.</li>
+    <li>The owner's weekly report to the CTO.</li>
+    <li>Escalation if the project indicators get worse — including when the new process itself starts getting in delivery's way.</li>
+  </ol>
+
+  <h3>How much detail to write</h3>
+  <p>A text description of “who does what”, step by step, is usually enough. Notations like BPMN or similar are only needed for complex processes with branching. You can write a procedure even for expert work like architecture or systems analysis — the experts themselves tend to react with “What's the problem? Everything works.”</p>
+  <p>A wiki is needed for a company-wide process spanning many teams. For a local one it's faster to agree verbally: a wiki makes the launch slower and more expensive, and for a small group the leader saying “this is how we work from now on” is record enough. Agreeing the process with every participant isn't mandatory either: it can be introduced top-down (the risk of resistance remains).</p>
+
+  <h3>Where it breaks</h3>
+  <ul>
+    <li><b>The process costs more than it brings.</b> A shared pool of interviewers in a 50-person unit didn't take: the manager was quick at deciding whom to send to an interview himself, and nothing got stuck on him. The process was dropped.</li>
+    <li><b>You changed one process and broke the adjacent one.</b> Hiring was ramped up through agencies, the pool of interviewers was widened, the interviewers stopped keeping up with their main work — and delivery sagged. Expect a pile-up in onboarding next.</li>
+    <li><b>A process goes stale the moment it appears.</b> Budget time for maintaining it. Large companies have process offices for this, and even a process for keeping processes current — “planning the planning” is not a joke there.</li>
+    <li><b>Writing the process down is half the job.</b> The hard part is getting people to actually work that way.</li>
+    <li><b>Confusing “hand off the process” with “hand off the right to change it”.</b> You hand off the work inside the process. The right to change the process itself is a separate decision; it can be handed off too, but deliberately.</li>
+  </ul>
+
+  <h3>Check yourself</h3>
+  <details><summary>Which process should you not set up?</summary><p>One for a unique task, or one that costs more than it brings.</p></details>
+  <details><summary>What does the CTO do after launching a process?</summary><p>Lets go and doesn't interfere: watches the metrics and the owner's weekly report, steps in on escalation.</p></details>
+  <details><summary>Does the process have to be written down?</summary><p>No. For a small group, an agreement voiced by the leader is enough. BPMN is only for complex branching.</p></details>

@@ -1,0 +1,146 @@
+<figure class="ks-fig">
+      <img src="/images/blog/bezopasnoe-delegirovanie/s4-gauges.webp" width="1400" height="934" loading="lazy" alt="A ship's bridge: a row of gauges, one glowing orange; the navigator with a checklist watches the gauges without touching the wheel">
+      <figcaption>The gauges are normal, one glows orange. The navigator watches the gauges rather than grabbing the wheel.</figcaption>
+    </figure>
+
+  <div class="ks-lead"><b>In short.</b> For every project take 1–2 metrics on each of its dimensions — team, quality, pace, scope, money, client, schedule — and roll them into one traffic-light status with clear rules. Then once a week you can see where everything is fine and where it's time to step in, without walking around asking people.</div>
+
+  <h3>Model: the seven dimensions of a project (PROJECT)</h3>
+  <div class="ks-tbl"><table>
+    <tr><th>Dimension</th><th>What it shows</th><th>Example metric</th></tr>
+    <tr><td><b>P</b>eople</td><td>State of the team</td><td>Team morale score: a monthly survey, scale 1–5 — comfortable in the company, on the project, with the manager; is there growth</td></tr>
+    <tr><td><b>R</b>eliability</td><td>Quality</td><td>Bug leakage: the share of bugs that reached production</td></tr>
+    <tr><td><b>O</b>perations</td><td>Pace</td><td>Done / promised per iteration: under 50% is bad, 50–80% needs attention, over 80% is normal</td></tr>
+    <tr><td><b>J</b>ob</td><td>Scope</td><td>Forecast completion date for the whole scope: remaining scope ÷ pace → date</td></tr>
+    <tr><td><b>E</b>conomy</td><td>Money</td><td>Remaining budget, margin</td></tr>
+    <tr><td><b>C</b>ustomer</td><td>Client</td><td>CSAT, NPS</td></tr>
+    <tr><td><b>T</b>imetable</td><td>Schedule</td><td>The current milestone or release: on track or not</td></tr>
+  </table></div>
+  <p class="ks-cap"><span class="ks-mk ks-mk-prac">from experience</span> PROJECT is a home-grown framework built by analogy with the HEART product framework. It's good as a checklist for a conversation about a project, but it isn't an industry standard; the thresholds in the table come from experience too. Scope and schedule are different dimensions: the next release can ship on time while the whole scope ships badly late.</p>
+  <p>The date forecast is rough but asymmetric: if it shows you're not going to make it, you definitely won't — it's a good cure for managers' over-optimism. The reason: scope grows, hidden work surfaces, and pace doesn't pick up on its own, so a forecast like this is almost always optimistic. So don't wait for a miracle: change the scope, the deadline or the resourcing now. The reverse isn't true: double-check a “we'll make it” forecast. Show the forecast as a range and update it regularly. <span class="ks-srcs">(<a href="https://www.scrum.org/resources/forecasting-techniques">Scrum.org, Forecasting techniques</a>)</span></p>
+
+  <svg viewBox="0 0 680 250" role="img" aria-label="How metrics turn into a status and actions">
+    <defs><marker id="m4" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--muted)"/></marker></defs>
+    <g fill="none" stroke-width="1.5" style="stroke:var(--ink)">
+      <rect x="10" y="35" width="185" height="54" rx="6"/>
+      <rect x="10" y="140" width="185" height="70" rx="6"/>
+      <rect x="240" y="92" width="150" height="62" rx="6"/>
+    </g>
+    <rect x="430" y="18" width="240" height="50" rx="6" fill="none" stroke-width="2" style="stroke:var(--good)"/>
+    <rect x="430" y="96" width="240" height="50" rx="6" fill="none" stroke-width="2" style="stroke:var(--warn)"/>
+    <rect x="430" y="178" width="240" height="62" rx="6" fill="none" stroke-width="2" style="stroke:var(--crit)"/>
+    <g font-size="13" style="fill:var(--ink)">
+      <text x="22" y="58" font-weight="700">Metrics</text><text x="22" y="77">across seven dimensions</text>
+      <text x="22" y="162" font-weight="700">Crises</text><text x="22" y="181">resignations, conflicts,</text><text x="22" y="199">client complaints</text>
+      <text x="252" y="118" font-weight="700">Rules</text><text x="252" y="137">for picking the status</text>
+      <text x="442" y="39" font-weight="700" style="fill:var(--good)">Good</text><text x="442" y="57">not detailed in the report</text>
+      <text x="442" y="117" font-weight="700" style="fill:var(--warn)">Warn</text><text x="442" y="135">notify, fix within a week</text>
+      <text x="442" y="199" font-weight="700" style="fill:var(--crit)">Critical</text><text x="442" y="217">action plan, constant contact,</text><text x="442" y="233">leadership steps in</text>
+    </g>
+    <g stroke-width="1.6" style="stroke:var(--muted)" marker-end="url(#m4)">
+      <line x1="197" y1="62" x2="236" y2="110"/><line x1="197" y1="175" x2="236" y2="138"/>
+      <line x1="392" y1="115" x2="426" y2="45"/><line x1="392" y1="123" x2="426" y2="121"/><line x1="392" y1="131" x2="426" y2="205"/>
+      <line x1="610" y1="148" x2="610" y2="174"/>
+    </g>
+    <text x="602" y="166" text-anchor="end" font-size="12" style="fill:var(--muted)">3 Warns in a row</text>
+  </svg>
+
+  <h3>What to do</h3>
+  <ol class="ks-steps">
+    <li><b>Don't invent metrics.</b> They were invented long ago: project metrics (PMBOK), flow metrics (Kanban: lead time, cycle time, WIP, throughput), product metrics. Take 1–2 per dimension: with more, you can't find your way around them.</li>
+    <li><b>Set thresholds:</b> what's normal, what needs attention, what's already a crisis. Look not only at the current value but at the forecast.</li>
+    <li><b>Pick the set according to what the unit sells</b> (table below).</li>
+    <li><b>Roll everything into a status:</b> Good / Warn / Critical (green, yellow, red), plus Uncertain — when it's unclear what's going on: there's no data, or it contradicts itself. Metrics enter the status with weights tuned to priorities: the status doesn't have to be “the worst of seven”. One-off events affect the status too — a resignation, a falling-out, a client complaint; those get flagged immediately.</li>
+    <li><b>Write down the action rules.</b> Warn means notify and fix by next week; if it's not fixed, escalate to the CTO. Three Warns in a row become Critical. Critical means an action plan and constant updates, sometimes daily calls. Once a week, the leadership team reviews the shared dashboard.</li>
+    <li><b>Collect metrics automatically</b> and look at the summary dashboard once a week. A snapshot every week or two is enough for delivery health; extra leading metrics aren't needed.</li>
+    <li><b>The reporting model is yours to own.</b> Which metrics, formulas and status rules to use is for the CTO to approve and agree with the leadership team; the regular collection becomes an operational routine. Design it together with the heads of delivery, finance and HR: that way the metrics make sense to the people who work by them. <span class="ks-srcs">(<a href="https://lethain.com/measuring-engineering-organizations">Will Larson, Measuring engineering organizations</a>)</span></li>
+    <li><b>Check what authority the people fixing a Warn actually have.</b> Either the project manager can only escalate, or they have real levers — paid overtime, say. Without levers, “fix within a week” is an empty rule.</li>
+  </ol>
+  <div class="ks-sporno"><b class="ks-t">Counterpoint · what the research says</b>Statuses are sometimes tied to incentives: for example, a Critical share above 10% per quarter costs the manager part of their bonus. That punishes honest escalation: people start delaying a red status, softening thresholds, refusing hard projects (“rewarding A while hoping for B”, Kerr). Better to reward the outcome and how the project was pulled out of trouble, and to encourage early disclosure of problems. A status is an instrument of truth, not a KPI. <span class="ks-srcs">Sources: <a href="https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Motivation/Kerr_Folly_of_rewarding_A_while_hoping_for_B.pdf">Kerr, “On the Folly of Rewarding A, While Hoping for B”</a>; <a href="https://sre.google/workbook/error-budget-policy/">Google SRE, Error budget policy</a>.</span></div>
+
+
+  <h3>Why it works</h3>
+  <p>A single metric can always be gamed — improved at the expense of another dimension of the project. Seven dimensions at once can't be fooled that way: the problem surfaces on a neighbouring one. And a single status with rules turns “I feel something's off” into a clear “Warn — fix within a week”.</p>
+
+  <h3>Example: what is the project's status?</h3>
+  <div class="ks-tbl"><table>
+    <tr><th>Dimension</th><th>Value</th><th>Threshold</th><th>Assessment</th></tr>
+    <tr><td>Team: morale score</td><td>4.5</td><td>&gt; 4</td><td class="ks-ok">normal</td></tr>
+    <tr><td>Quality: bug leakage</td><td>5%</td><td>&lt; 15%</td><td class="ks-ok">normal</td></tr>
+    <tr><td>Pace: done / promised</td><td>20 of 30 (≈67%)</td><td>50–80% is the yellow zone</td><td style="color:var(--warn);font-weight:600">attention</td></tr>
+    <tr><td>Scope: completion forecast</td><td>10 days late</td><td>no delay</td><td class="ks-no">bad</td></tr>
+    <tr><td>Money: remaining budget</td><td>5k</td><td>&gt; 0</td><td class="ks-ok">normal</td></tr>
+    <tr><td>Client: CSAT</td><td>5</td><td>&gt; 4</td><td class="ks-ok">normal</td></tr>
+    <tr><td>Schedule: current milestone</td><td>on time</td><td>—</td><td class="ks-ok">normal</td></tr>
+  </table></div>
+  <details><summary>Your answer? Click to compare</summary><p><b>Warn.</b> The problems aren't critical, but the risk is serious: the project is a whole work cycle behind, and the pace is in the yellow zone. Notify and fix by next week. If it isn't back on track in three weeks, it becomes Critical: the CTO steps in and the leadership team is brought in.</p></details>
+
+  <h3>What to do when the pace is red</h3>
+  <ul>
+    <li><b>First, escalation and a root-cause review.</b> Typical causes: a task is “95% done” but not merged; over-promising — “we threw in tasks just in case”.</li>
+    <li><b>The result is blocked by an outside party</b> — the client reviews every pull request themselves, their security team checks the delivery. Then “done” for the team ends at hand-over to review or inspection: beyond that, nothing depends on the team. But count “ready for hand-over” and “accepted by the client” separately: the waiting time on the client's side doesn't disappear just because you stopped counting it.</li>
+    <li><b>The team is genuinely at its limit</b> — 50 units of work are needed, it does 30 and can't do more. So it has to grow. But first try to cut work in progress and scope: people added to a late project slow it down at first (<a href="https://www.cs.virginia.edu/~evans/greatworks/mythical.pdf">Brooks's law, “The Mythical Man-Month”</a>). Grow for sustained demand, and where the work splits into parallel parts.</li>
+  </ul>
+
+  <h3>The metric set depends on what the unit sells</h3>
+  <div class="ks-tbl"><table>
+    <tr><th>Unit</th><th>Main indicator</th><th>What else to watch</th></tr>
+    <tr><td>Turnkey projects (outsourcing) and client implementations</td><td>The summary project status across seven dimensions, above all schedule, scope, money and margin, client</td><td>The full PROJECT set; a weekly portfolio report</td></tr>
+    <tr><td>Staff augmentation (selling a specific person's time)</td><td>Per-person economics: utilisation and margin</td><td>Client satisfaction, team morale. Scope and schedule aren't tracked: the client owns the process, though you can keep your own iteration records internally. Each person's pace is often named the main indicator — see the counterpoint below</td></tr>
+    <tr><td>Product development that makes its money from implementations</td><td>Turnaround on fixes and requests from implementation projects</td><td>What matters here isn't tech debt, or even on-time releases. The customer is the implementation projects; measure their satisfaction. Plus the standard pace and budget, and the balance between development and implementation work, so the team doesn't get carried away with the new at the expense of what it's paid for</td></tr>
+    <tr><td>A product company (SaaS)</td><td>Product outcomes: retention, revenue per customer, success rates of key user journeys</td><td>The four DORA delivery metrics: deployment frequency, lead time from commit to production, change failure rate, time to restore. Plus the service SLO (below) and the HEART framework for the product</td></tr>
+  </table></div>
+  <p class="ks-srcs">Source: <a href="https://dora.dev/guides/dora-metrics">DORA, delivery metrics</a>.</p>
+
+  <div class="ks-sporno"><b class="ks-t">Counterpoint · what the research says</b>A common view: in staff augmentation the main indicator is each person's pace (velocity), and the quality of an individual specialist can't be measured. Per-person economics — utilisation, margin, revenue per head — are perfectly fine to measure; services firms do it routinely. But story points are not a measure of individual productivity: an activity metric people are rewarded or punished on breaks teamwork. Productivity is assessed at the team level and across several dimensions, and an individual's quality through reviews and their contribution over time. <span class="ks-srcs">Sources: <a href="https://cacm.acm.org/practice/the-space-of-developer-productivity">SPACE of developer productivity</a>; <a href="https://forms.workday.com/content/dam/web/en-us/documents/reports/SPI_2025_Benchmark_Report.pdf">SPI, Professional Services Benchmark 2025</a>.</span></div>
+
+  <h3>Flow metrics and a range forecast</h3>
+  <p>Above, pace and forecast are counted by iteration: “done / promised” and a velocity-based forecast. If the team works in a flow, without sprints, the four basic Kanban metrics are more convenient:</p>
+  <ul>
+    <li><b>work in progress (WIP)</b> — how many tasks are in progress at once;</li>
+    <li><b>throughput</b> — how many tasks get finished per week;</li>
+    <li><b>cycle time</b> — how long a task takes from start of work to done;</li>
+    <li><b>work item age</b> — how long the tasks in progress have been hanging. Old tasks show where work is stuck in a queue.</li>
+  </ul>
+  <p>The date forecast is calculated from the remaining scope and the actual throughput, and given as a range with a probability — for example, with a Monte Carlo simulation over history: “by such-and-such a date with 85% probability”. Don't push people's utilisation to 100%: queues then grow faster than it seems. After AI agents are introduced, recalculate the old thresholds and the historical pace: the old numbers can't be compared with the new ones.</p>
+  <p class="ks-srcs">Sources: <a href="https://kanbanguides.org/open-guide-to-kanban/2025.7/pdf/open-guide-to-kanban.en.pdf">Open Guide to Kanban, 2025</a>; <a href="https://www.scrum.org/resources/forecasting-techniques">Scrum.org, Forecasting techniques</a>; <a href="http://celeritaspublishing.com/wp-content/uploads/2013/07/ReinertsenFLOWChap1.pdf">Reinertsen, “The Principles of Product Development Flow”, ch. 1</a>.</p>
+
+  <h3>SLO and the error budget</h3>
+  <p>Product and engineering together set the target reliability of the service — the SLO, for example “99.9% of requests succeed over 30 days”. The gap up to 100% is the error budget. While there's budget left, the team ships releases; once it's used up, releases slow down and the team works on reliability. The rule is agreed in advance, so the “speed or reliability” dispute — the eternal QA-versus-dev argument in companies with a separate test team — gets settled without escalating to the CTO. The error budget is a shared agreement.</p>
+  <p class="ks-srcs">Sources: <a href="https://sre.google/workbook/error-budget-policy/">Google SRE Workbook, Error budget policy</a>; <a href="https://sre.google/workbook/how-sre-relates/">Google SRE Workbook, How SRE relates to DevOps</a>.</p>
+
+  <h3>Where it breaks</h3>
+  <figure class="ks-fig">
+    <img src="/images/blog/bezopasnoe-delegirovanie/s4-facade.webp" width="1400" height="934" loading="lazy" alt="A man looks contentedly at a gauge showing the safe zone, while behind the open panel door there is a tangle of wires, patches and steam">
+    <figcaption>One metric being normal doesn't mean everything inside is fine. Open the door from time to time: tech debt, quality, people.</figcaption>
+  </figure>
+  <ul>
+    <li><b>One metric — and it gets gamed.</b> A cheap project was staffed with juniors to fit the budget. The budget was green, and when they decided to drop the client and opened the tech-debt board, they were simply stunned. A deliberate trade-off is a different matter: temporarily sacrificing quality for the deadline is fine if it's agreed with the client.</li>
+    <li><b>Noise.</b> The client had a test environment with no production-like data, so bugs steadily leaked into production and bug leakage stayed red against the 15% norm. For that project the threshold was raised to 30% — and it became visible when the project was really in trouble. The same with chronic over-promising per iteration: because of it, a third to a half of projects were red, and such cases had to be separated out of the overall status so they wouldn't drown the other signals.</li>
+    <li><b>Survey fatigue.</b> Over time the middle stops responding and the picture drifts to the extremes. You can't fix it with bonuses — you'll get numbers filled in just to get it over with. A counter-example: response rates went from 30% to 70% in a year — surveys were cut to a minimum, deadlines were set, and HR sent reminders. The survey is complemented by the manager's or HR's subjective assessment after one-on-ones — loyalty and satisfaction, what we called the People Status; it only works in tandem with the survey.</li>
+    <li><b>Cultural differences.</b> In some cultures people always give top marks; in others they politely put up with things for years. A Canadian client kept quiet about poor work for a long time, and when it blew up it was too late to fix — although an honest review in the very first month would have saved everything.</li>
+  </ul>
+  <div class="ks-sporno"><b class="ks-t">Counterpoint · what the research says</b>Team morale is sometimes collected non-anonymously: on low scores someone goes to the person to sort it out. A survey with names distorts the answers. Good practice is a confidential monthly pulse survey where the manager sees only group results (as at Gallup), and the conversation with a person is separate, one-on-one and with their consent. Response rates of 30–40% and an eNPS no more than twice a year are sometimes considered normal; Culture Amp cites 65–85% participation, and eNPS is often run monthly (Bain). <span class="ks-srcs">Sources: <a href="https://support.gallup.com/hc/en-us/articles/40582528755475-Can-I-identify-a-specific-employee-s-survey-responses">Gallup: individual responses aren't disclosed</a>; <a href="https://www.cultureamp.com/blog/what-is-a-good-survey-response-rate">Culture Amp: what a good response rate is</a>; <a href="https://nps.bain.com/about/employee-nps">Bain: Employee NPS</a>.</span></div>
+
+  <details class="ks-ref"><summary>Reference: how to collect data about the team and the client</summary>
+    <ul>
+      <li><b>Team morale</b> was collected by HR once a month (on non-anonymity, see the counterpoint box above). Results were aggregated by person, team, department and company, and linked to projects.</li>
+      <li><b>Client satisfaction</b> can be measured without questionnaires: in conversation the account manager asks the client “veiled” questions instead of “rate us on a five-point scale” and sets the score themselves. NPS comes on project completion; in support, smileys at the end of a ticket.</li>
+    </ul>
+  </details>
+  <details class="ks-ref"><summary>Reference: where to get ready-made metrics</summary>
+    <ul>
+      <li><b>Project (PMBOK):</b> planned, earned and forecast budget; schedule and cost variances; schedule and cost performance indices.</li>
+      <li><b>Flow (Kanban)</b> — one of the approaches that lean most heavily on metrics: lead time (from a task appearing to release), cycle time (from start of work to done), WIP (how much is in progress), waiting time, share of value-adding work, throughput.</li>
+      <li><b>Iteration:</b> estimation accuracy, burndown chart, pace (velocity), delivery date forecast.</li>
+      <li><b>Product:</b> ARPU, average order value, LTV, acquisition, engagement, retention, performance and reliability. The HEART framework: Happiness, Engagement, Adoption, Retention, Task Success — 1–2 metrics per letter.</li>
+      <li>DORA metrics, the cumulative flow diagram (CFD) and the number of incidents are also commonly used.</li>
+    </ul>
+  </details>
+
+  <h3>Check yourself</h3>
+  <details><summary>Why seven dimensions, if only the deadline matters?</summary><p>So that the deadline isn't improved at the expense of quality, the team or money.</p></details>
+  <details><summary>A metric is permanently red but the project is fine. What to do?</summary><p>Revise the threshold for this project, otherwise the status turns into noise.</p></details>
+  <details><summary>Three Warns in a row. What next?</summary><p>Critical: an action plan, constant updates, the leadership team is brought in.</p></details>
+
+  <p class="ks-srcs">Further reading: Erin Meyer, “The Culture Map”.</p>
